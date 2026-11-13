@@ -1,26 +1,166 @@
 @import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
 @theme inline {
+  /* brand palette */
+  --color-rust: #8b3a16;
+  --color-rust-dark: #6e2c10;
+  --color-cream: #fbf3dc;
+  --color-lime: #e3ea55;
+  --color-lime-dark: #cdd43c;
+  --color-sky: #c9d6ff;
+  --color-lavender: #a9a0f0;
+  --color-lilac: #e8ccf6;
+  --color-peach: #f4a97c;
+  --color-butter: #f6d77b;
+  --color-ink: #2a1408;
+
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-bricolage);
+  --font-serif: var(--font-instrument);
+
+  /* shadcn tokens mapped onto the palette */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  --animate-spin-slow: spin 20s linear infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --background: #fbf3dc;
+  --foreground: #2a1408;
+  --card: #ffffff;
+  --card-foreground: #2a1408;
+  --popover: #8b3a16;
+  --popover-foreground: #ffffff;
+  --primary: #8b3a16;
+  --primary-foreground: #ffffff;
+  --secondary: #e3ea55;
+  --secondary-foreground: #8b3a16;
+  --muted: #f3e6c2;
+  --muted-foreground: #5c3a24;
+  --accent: #e3ea55;
+  --accent-foreground: #8b3a16;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: rgb(139 58 22 / 0.3);
+  --input: rgb(139 58 22 / 0.3);
+  --ring: #8b3a16;
+  --radius: 1rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    @apply font-sans scroll-smooth;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  /* default focus ring; components may override with ring utilities */
+  :focus-visible {
+    outline: 2px solid var(--color-rust);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* very subtle printed-paper grain (use with opacity-[0.04]) */
+@utility grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+@utility font-display {
+  font-family: var(--font-heading);
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+  font-weight: 600;
+}
+
+/* placeholder values from data/site.ts that still start with TODO */
+@utility todo {
+  outline: 2px dashed currentColor;
+  outline-offset: 2px;
+  border-radius: 4px;
+  padding-inline: 0.25em;
+  background: repeating-linear-gradient(-45deg, transparent 0 6px, rgb(227 234 85 / 0.35) 6px 12px);
+}
+
+/* ── Custom scrollbar: rust pill thumb on a cream track ── */
+@layer base {
+  /* Chromium / Safari */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-cream);
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: rgb(139 58 22 / 0.55);
+    border: 3px solid var(--color-cream);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-rust);
+  }
+  ::-webkit-scrollbar-thumb:active {
+    background-color: var(--color-rust-dark);
+  }
+  ::-webkit-scrollbar-corner {
+    background: var(--color-cream);
+  }
+  /* inside white cards/inputs (e.g. textarea) keep the track matching the field */
+  textarea::-webkit-scrollbar-track,
+  textarea::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  textarea::-webkit-scrollbar-thumb {
+    border-color: transparent;
+    background-clip: padding-box;
+  }
+
+  /* Firefox only (Chromium ignores ::-webkit-scrollbar when scrollbar-color is set) */
+  @supports not selector(::-webkit-scrollbar) {
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: rgb(139 58 22 / 0.55) var(--color-cream);
+    }
+  }
+
+  ::selection {
+    background: var(--color-lime);
+    color: var(--color-rust);
+  }
 }
