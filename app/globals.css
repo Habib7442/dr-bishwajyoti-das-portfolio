@@ -48,6 +48,13 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 
   --animate-spin-slow: spin 20s linear infinite;
+  --animate-marquee: marquee 30s linear infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
 }
 
 :root {
@@ -93,6 +100,13 @@
       scroll-behavior: auto;
     }
   }
+}
+
+/* set for ~300ms by lib/use-reveal.ts when the 2.5s fallback reveals off-screen content instantly */
+[data-reveal-instant] *,
+[data-reveal-instant] *::before,
+[data-reveal-instant] *::after {
+  transition: none !important;
 }
 
 /* very subtle printed-paper grain (use with opacity-[0.04]) */

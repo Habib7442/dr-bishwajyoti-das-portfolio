@@ -48,7 +48,6 @@ export const site = {
   images: {
     // decorative background illustration (2400×1350 recommended); alt is empty on purpose
     hero: { src: "/images/hero-ear.webp", alt: "" },
-    doctor: { src: unsplash("1612349317150-e413f6a5b16d"), alt: "Portrait of Dr. Biswajyoti Das (placeholder photo)" },
     chamber: { src: unsplash("1519494026892-80bbd2d6fd0d"), alt: "Hospital reception desk (placeholder for Nightingale Hospital)" },
   },
 };
@@ -66,6 +65,47 @@ export const quickFactsShort: Record<keyof typeof quickFacts, string> = {
   hours: "Mon–Sat · 2:30–9 PM",
   fee: "₹500",
 };
+
+/** Lavender "Meet Your Doctor" band. Anything still starting with TODO is hidden on the page. */
+export type AboutInfo = { label: string; value: string };
+export type ApproachIcon = "Ear" | "MessagesSquare" | "HandHeart";
+
+const languages = "TODO: confirm with the doctor — Bengali, English, Hindi?";
+
+export const about = {
+  eyebrow: "Meet your doctor",
+  // headline, not a quote: no quotation marks, not attributed to the doctor
+  statement: { lead: "Good treatment starts with", accent: "listening." },
+  name: site.name,
+  role: site.title,
+  // shown on a cream arch, no filters. A background-removed /images/doctor/portrait.png looks best: change this path when it arrives.
+  portrait: "/images/doctor/portrait.webp",
+  portraitAlt: "Dr. Biswajyoti Das, ENT & Allergy Specialist in Silchar",
+  qualifications: site.qualifications,
+  experienceYears: site.experienceYears,
+  registration: site.registrationNo,
+  languages,
+  bio: [
+    "TODO: 2–3 short sentences in the doctor's own words about his training, experience and how he treats patients.",
+  ],
+  approach: [
+    { icon: "Ear", title: "Listens first", text: "Takes time to understand your problem before suggesting any treatment." },
+    { icon: "MessagesSquare", title: "Explains clearly", text: "Tells you what is wrong and what the options are, in simple words." },
+    { icon: "HandHeart", title: "Treats gently", text: "Careful, comfortable check-ups, especially for children and older patients." },
+  ] as { icon: ApproachIcon; title: string; text: string }[],
+  // info bar, in this order; each item is shown only once its value is filled in
+  info: [
+    { label: "Practices at", value: quickFacts.place },
+    { label: "Available", value: quickFacts.hours },
+    { label: "Fee", value: site.fee },
+    { label: "Qualification", value: site.qualifications },
+    { label: "Experience", value: site.experienceYears },
+    { label: "Speaks", value: languages },
+    { label: "Registration", value: site.registrationNo },
+  ] as AboutInfo[],
+  marquee: ["Ear", "Nose", "Throat", "Allergy", "Hearing", "Sinus", "Voice"],
+};
+
 
 /** Rust intro band under the hero. Stats whose value starts with TODO are hidden. */
 export type IntroLine = { text: string; indent: 0 | 1; asterisk?: boolean; accent?: boolean; pill?: string };
@@ -170,16 +210,6 @@ export const services: Service[] = [
       "Diagnostic nasal and throat endoscopy in the chamber, plus minimally invasive endoscopic sinus and ENT surgery when it is needed, with smaller cuts, less pain and a quicker recovery.",
     image: { src: unsplash("1551601651-2a8555f1a136"), alt: "Surgical team performing a procedure" },
   },
-];
-
-export type Highlight = { kind: "education" | "experience" | "practice" | "membership" | "interest"; label: string; text: string };
-
-export const highlights: Highlight[] = [
-  { kind: "education", label: "Education", text: "TODO: degrees, college and year (e.g. MBBS — …, MS ENT — …)" },
-  { kind: "experience", label: "Experience", text: "TODO: years in practice and previous hospitals" },
-  { kind: "practice", label: "Current Practice", text: "ENT & Allergy Specialist at Nightingale Hospital, Meherpur, Silchar" },
-  { kind: "membership", label: "Memberships", text: "TODO: professional bodies (e.g. Association of Otolaryngologists of India)" },
-  { kind: "interest", label: "Special Interests", text: "Allergy care, endoscopic sinus treatment, hearing and vertigo" },
 ];
 
 export const audiences = [

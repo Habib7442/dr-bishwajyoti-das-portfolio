@@ -1,23 +1,25 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { animate, motion, useInView, useReducedMotion } from "motion/react";
+import { animate, motion, useReducedMotion } from "motion/react";
 import { ease } from "@/lib/motion";
 import { bookNow } from "@/lib/scroll-to-booking";
 import { cn } from "@/lib/utils";
+import { useReveal } from "@/lib/use-reveal";
 
-const VIEWPORT = { once: true, amount: 0.3 } as const;
 const LINE_STAGGER = 0.12;
 const LINE_DURATION = 0.8;
 
 /** One statement line: rise 40px + fade, staggered by index */
 export function StatementLine({ index, className, children }: { index: number; className?: string; children: React.ReactNode }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const shown = useReveal(ref);
   return (
     <motion.span
+      ref={ref}
       className={className}
       initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={VIEWPORT}
+      animate={shown ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
       transition={{ duration: LINE_DURATION, ease, delay: index * LINE_STAGGER }}
     >
       {children}
@@ -32,7 +34,7 @@ export function StatementLine({ index, className, children }: { index: number; c
  */
 export function AccentWord({ index, children }: { index: number; children: React.ReactNode }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, VIEWPORT);
+  const inView = useReveal(ref);
   return (
     <span
       ref={ref}
@@ -46,13 +48,15 @@ export function AccentWord({ index, children }: { index: number; children: React
 
 /** Image pill: springs 0 → 1 after the last line (index) lands */
 export function PillPop({ index, className, children }: { index: number; className?: string; children: React.ReactNode }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const shown = useReveal(ref);
   return (
     <motion.span
+      ref={ref}
       aria-hidden
       className={className}
       initial={{ scale: 0 }}
-      whileInView={{ scale: 1 }}
-      viewport={VIEWPORT}
+      animate={{ scale: shown ? 1 : 0 }}
       transition={{ type: "spring", stiffness: 260, damping: 18, delay: index * LINE_STAGGER + LINE_DURATION }}
     >
       {children}
@@ -62,12 +66,14 @@ export function PillPop({ index, className, children }: { index: number; classNa
 
 /** Fade up 24px on view */
 export function FadeUp({ delay = 0, className, children }: { delay?: number; className?: string; children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const shown = useReveal(ref);
   return (
     <motion.div
+      ref={ref}
       className={className}
       initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={VIEWPORT}
+      animate={shown ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
       transition={{ duration: 0.7, ease, delay }}
     >
       {children}
@@ -100,7 +106,7 @@ function parseNumeric(value: string) {
 
 function StatValue({ value }: { value: string }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, VIEWPORT);
+  const inView = useReveal(ref);
   const reduce = useReducedMotion();
   const parsed = parseNumeric(value);
   const [shown, setShown] = useState(parsed && !reduce ? `${parsed.prefix}0${parsed.suffix}` : value);
@@ -132,20 +138,27 @@ export function StatsRow({ stats }: { stats: { value: string; label: string }[] 
   return (
     <dl className="mt-24 grid divide-y divide-white/15 border-t border-white/15 pt-12 md:grid-cols-3 md:gap-6 md:divide-y-0">
       {stats.map((s, i) => (
-        <motion.div
-          key={s.label}
-          className="flex flex-col-reverse gap-2 py-6 first:pt-0 md:py-0"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={VIEWPORT}
-          transition={{ duration: 0.6, ease, delay: i * 0.1 }}
-        >
-          <dt className="text-[13px] text-white/70">{s.label}</dt>
-          <dd className="font-heading text-[clamp(2.5rem,5vw,3.5rem)] leading-none font-medium tracking-[-0.03em] text-lime">
-            <StatValue value={s.value} />
-          </dd>
-        </motion.div>
+        <StatItem key={s.label} stat={s} index={i} />
       ))}
     </dl>
+  );
+}
+
+function StatItem({ stat, index }: { stat: { value: string; label: string }; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const shown = useReveal(ref);
+  return (
+    <motion.div
+      ref={ref}
+      className="flex flex-col-reverse gap-2 py-6 first:pt-0 md:py-0"
+      initial={{ opacity: 0, y: 24 }}
+      animate={shown ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+      transition={{ duration: 0.6, ease, delay: index * 0.1 }}
+    >
+      <dt className="text-[13px] text-white/70">{stat.label}</dt>
+      <dd className="font-heading text-[clamp(2.5rem,5vw,3.5rem)] leading-none font-medium tracking-[-0.03em] text-lime">
+        <StatValue value={stat.value} />
+      </dd>
+    </motion.div>
   );
 }

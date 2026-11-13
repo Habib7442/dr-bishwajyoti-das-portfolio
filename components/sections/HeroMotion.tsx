@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { ease, transition } from "@/lib/motion";
+import { Highlighter } from "@/components/ui/highlighter";
 
 const WORD_STAGGER = 0.08;
 const WORD_START = 0.2;
@@ -67,15 +68,7 @@ export function HeroHeadline({ lines, highlight }: { lines: string[]; highlight:
                     transition={{ duration: WORD_DURATION, ease, delay }}
                   >
                     {word}
-                    {isHighlight && (
-                      <motion.span
-                        aria-hidden
-                        className="absolute inset-x-[-0.06em] bottom-[0.08em] -z-10 h-[40%] origin-left -skew-x-2 rounded-[2px] bg-lime"
-                        initial={{ scaleX: 0 }}
-                        animate={{ scaleX: 1 }}
-                        transition={{ duration: 0.5, ease, delay: highlightDelay }}
-                      />
-                    )}
+                    {isHighlight && <Highlighter delay={highlightDelay} />}
                   </motion.span>
                 </span>
                 {wi < line.length - 1 && " "}

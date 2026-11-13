@@ -3,6 +3,12 @@ import type { Transition, Variants } from "motion/react";
 /** House easing from DESIGN.md §9 */
 export const ease = [0.22, 1, 0.36, 1] as const;
 
+/** Every scroll reveal on the site uses this (via lib/use-reveal.ts) */
+export const VIEWPORT = { once: true, amount: 0.1 } as const;
+
+/** Safety net: anything still hidden this long after page load is shown (full-page screenshots never scroll) */
+export const REVEAL_FALLBACK_MS = 2500;
+
 export const fadeUp: Variants = {
   hidden: { opacity: 0, y: 32 },
   show: (delay: number = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.7, ease, delay } }),

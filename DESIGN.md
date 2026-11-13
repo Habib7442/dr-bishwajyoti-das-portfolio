@@ -53,7 +53,7 @@ Register them in the Tailwind v4 `@theme` block, so classes like `bg-rust`, `tex
 | 1 | Hero | ear illustration + cream overlay (left→right fade; `cream/85` on mobile) | rust | ink/80 | lime highlighter behind "Throat." + lime badge |
 | 2 | Intro statement | rust | white | white/80 | lime |
 | 3 | Services | cream | rust | ink | lime ✳ |
-| 4 | About doctor | lavender | white | white/90 | lime arrows |
+| 4 | About doctor | lavender | ink (name: rust) | ink/80 | rust word + lime highlighter, lime marquee ribbon |
 | 5 | Chamber & timings | rust | white | white/80 | lime |
 | 6 | Who we help | lilac | rust | ink | — |
 | 7 | Reviews | cream | rust | ink | tag pills |

@@ -229,7 +229,9 @@ export function BookingCard() {
                       onClick={() => update("problem", p)}
                       onKeyDown={(e) => onChipKey(e, idx)}
                       className={cn(
-                        "h-9 rounded-full px-3 text-[13px] font-medium transition-colors md:h-11 md:px-3.5 focus-visible:ring-2 focus-visible:ring-lime focus-visible:outline-rust",
+                        // phones: 32px chips, px-2 so all 5 fit on one line at 375 (px-3 needed 313px of 285px);
+                        // the ::after hit area adds 8px above and below for a 48px touch target
+                        "relative h-8 rounded-full px-2 text-[12px] font-medium transition-colors after:absolute after:inset-x-0 after:-inset-y-2 md:h-11 md:px-3.5 md:text-[13px] md:after:hidden focus-visible:ring-2 focus-visible:ring-lime focus-visible:outline-rust",
                         checked ? "bg-rust text-white" : "border border-rust/20 bg-white/85 text-rust hover:border-rust/50",
                       )}
                     >
