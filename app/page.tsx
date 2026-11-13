@@ -4,6 +4,7 @@ import { FloatingWhatsApp } from "@/components/sections/FloatingWhatsApp";
 import { Hero } from "@/components/sections/Hero";
 import { Intro } from "@/components/sections/Intro";
 import { Navbar } from "@/components/sections/Navbar";
+import { WhoWeHelp } from "@/components/sections/WhoWeHelp";
 import { nav, site } from "@/data/site";
 
 // Sections are added one approved prompt at a time (see prompts/).
@@ -17,6 +18,7 @@ export default function Home() {
         <Intro />
         <About />
         <Chamber />
+        <WhoWeHelp />
       </main>
       <FloatingWhatsApp />
     </>

@@ -61,7 +61,7 @@ export function Navbar({ name, links }: Props) {
           <li>
             <button
               type="button"
-              onClick={bookNow}
+              onClick={() => bookNow()}
               className="inline-flex h-10 items-center rounded-full bg-rust px-5 text-[13px] font-medium text-white transition duration-200 ease-out hover:-translate-y-px hover:bg-rust-dark motion-reduce:hover:translate-y-0"
             >
               Book Now

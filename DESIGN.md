@@ -110,7 +110,7 @@ Register them in the Tailwind v4 `@theme` block, so classes like `bg-rust`, `tex
 | Service thumbnail | `8px` |
 | Doctor portrait (about) | full circle on a colored disc |
 | Chamber photo | **arch**: `border-radius: 999px 999px 999px 999px / 50% 50% 50% 50%`, or a tall pill shape with a thin lime outline offset by 8px |
-| Who-we-help images | **blob**: SVG `clipPath` made of 2–3 overlapping circles (see the reference's kids/teen cards) |
+| Who-we-help images | one big soft corner per card (120px; others 22px): children top-right, adults top-left, seniors bottom-right. No blobs or circles (client request) |
 | Services → About transition | full-width SVG ellipse; the cream band curves down into lavender |
 
 Keep the reusable shapes in `components/shapes/`: `BlobMask.tsx`, `ArchFrame.tsx`, `CurveDivider.tsx`.
@@ -147,9 +147,9 @@ Every button needs a visible focus ring: `focus-visible:ring-2 ring-offset-2 rin
 - Scroll-snap horizontal track, prev/next controls on the top right.
 
 ### Who-we-help card
-- White bg, 24px radius, 16px padding.
-- Blob image on top (aspect 4/3) with a peach / butter / sky background behind it.
-- Centered H4 rust title + 2 lines of small ink text.
+- White bg, 28px radius, 16px padding (32px bottom), flat (no border, no shadow).
+- Image panel on top (aspect 4/3; 16/10 on mobile) with a peach / butter / sky background and the one-big-corner shape from §5.
+- Centered H4-style rust title (26px), 2 lines of small ink/75 text, condition tags in the card's colour tint, then a "Book for … →" link.
 
 ### Review card
 - White bg, 24px radius, 24px padding.

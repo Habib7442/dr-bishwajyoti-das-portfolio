@@ -16,6 +16,7 @@ import {
 } from "@/lib/booking";
 import { isTodo, telHref, whatsappUrl } from "@/lib/site-helpers";
 import { cn } from "@/lib/utils";
+import { PREFILL_EVENT, type PrefillDetail } from "@/lib/scroll-to-booking";
 
 const inputBase =
   "h-11 w-full rounded-2xl border border-rust/15 bg-white/85 px-4 text-base text-ink placeholder:text-ink/45 transition-colors focus-visible:border-rust focus-visible:ring-2 focus-visible:ring-lime focus-visible:outline-none aria-invalid:border-rust";
@@ -56,6 +57,19 @@ export function BookingCard() {
   useEffect(() => {
     if (done) successRef.current?.focus();
   }, [done]);
+
+  // "Book for Children →" etc. (Who We Help) pre-select a problem chip via bookNow(problem)
+  useEffect(() => {
+    const onPrefill = (e: Event) => {
+      const { problem } = (e as CustomEvent<PrefillDetail>).detail;
+      setDone(false); // back to the form if the success screen was showing
+      setForm((f) => ({ ...f, problem }));
+      setErrors((er) => ({ ...er, problem: undefined }));
+      setTouched((t) => ({ ...t, problem: true }));
+    };
+    window.addEventListener(PREFILL_EVENT, onPrefill);
+    return () => window.removeEventListener(PREFILL_EVENT, onPrefill);
+  }, []);
 
   const show = (k: keyof BookingForm) => (attempted || touched[k] ? errors[k] : undefined);
 

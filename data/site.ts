@@ -135,6 +135,57 @@ export const chamber = {
   whatsappMessage: "Hello Doctor, I'd like to book an appointment at Nightingale Hospital, Meherpur.",
 };
 
+/** Lilac "Who We Help" band. `problem` pre-selects the hero form's chip from the card link. */
+export type WhoGroup = {
+  key: "children" | "adults" | "seniors";
+  title: string;
+  text: string;
+  conditions: string[];
+  image: string;
+  imageAlt: string;
+  bg: "peach" | "butter" | "sky";
+  problem: (typeof booking.problems)[number];
+};
+
+export const whoWeHelp = {
+  eyebrow: "Care for every age",
+  titleLead: "Who We",
+  titleAccent: "Help?",
+  intro: "ENT problems look different at every age. Dr. Das adjusts each check-up to the patient in front of him.",
+  groups: [
+    {
+      key: "children",
+      title: "Children",
+      text: "Ear infections, blocked nose, tonsils, adenoids and mouth breathing. Gentle check-ups that don't scare little ones.",
+      conditions: ["Ear infections", "Tonsils", "Adenoids"],
+      image: "/images/who/children.webp",
+      imageAlt: "Child smiling during a gentle ear check-up",
+      bg: "peach",
+      problem: "Ear",
+    },
+    {
+      key: "adults",
+      title: "Adults",
+      text: "Sinus trouble, allergies, throat infections, voice problems and hearing changes from work or daily life.",
+      conditions: ["Sinusitis", "Allergies", "Throat & voice"],
+      image: "/images/who/adults.webp",
+      imageAlt: "Smiling woman breathing easily through her nose",
+      bg: "butter",
+      problem: "Nose",
+    },
+    {
+      key: "seniors",
+      title: "Senior Citizens",
+      text: "Hearing loss, ringing in the ears, dizziness and balance problems. Unhurried care with clear explanations.",
+      conditions: ["Hearing loss", "Vertigo", "Tinnitus"],
+      image: "/images/who/seniors.webp",
+      imageAlt: "Smiling older man cupping his hand to his ear to listen",
+      bg: "sky",
+      problem: "Ear",
+    },
+  ] as WhoGroup[],
+};
+
 
 /** Rust intro band under the hero. Stats whose value starts with TODO are hidden. */
 export type IntroLine = { text: string; indent: 0 | 1; asterisk?: boolean; accent?: boolean; pill?: string };
@@ -241,26 +292,6 @@ export const services: Service[] = [
   },
 ];
 
-export const audiences = [
-  {
-    title: "Children",
-    points: ["Ear infections", "Tonsils", "Adenoids"],
-    image: { src: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=900&q=80", alt: "Smiling young child" },
-    blob: "peach" as const,
-  },
-  {
-    title: "Adults",
-    points: ["Sinus", "Allergy", "Hearing", "Voice"],
-    image: { src: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=900&q=80", alt: "Smiling adult man with glasses" },
-    blob: "butter" as const,
-  },
-  {
-    title: "Senior Citizens",
-    points: ["Hearing loss", "Vertigo", "Balance"],
-    image: { src: "https://images.unsplash.com/photo-1581056771107-24ca5f033842?auto=format&fit=crop&w=900&q=80", alt: "Doctor speaking with an older patient" },
-    blob: "peach" as const,
-  },
-];
 
 export const faqs = [
   { q: "What is the consultation fee?", a: `The consultation fee is ${site.fee}, payable at the chamber.` },
