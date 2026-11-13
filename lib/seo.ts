@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { site } from "@/data/site";
+import { chamber, site } from "@/data/site";
+import { openingHoursSpec } from "@/lib/chamber-hours";
 import { isTodo } from "@/lib/site-helpers";
 
 /**
@@ -81,14 +82,8 @@ const address = {
   addressCountry: site.address.country,
 };
 
-const openingHoursSpecification = [
-  {
-    "@type": "OpeningHoursSpecification",
-    dayOfWeek: site.openingHours.days,
-    opens: site.openingHours.opens,
-    closes: site.openingHours.closes,
-  },
-];
+// generated from the chamber schedule (grouped days, closed days omitted)
+const openingHoursSpecification = openingHoursSpec(chamber.schedule);
 
 const ids = {
   physician: `${site.url}/#physician`,

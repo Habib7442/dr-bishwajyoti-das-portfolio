@@ -34,8 +34,6 @@ export const site = {
   },
   days: "Monday – Saturday",
   hours: "2:30 PM – 9:00 PM",
-  // machine-readable hours for JSON-LD
-  openingHours: { days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], opens: "14:30", closes: "21:00" },
   fee: "₹500",
 
   phone: "+91 98643 71333", // e.g. "+91 98XXXXXXXX"
@@ -104,6 +102,37 @@ export const about = {
     { label: "Registration", value: site.registrationNo },
   ] as AboutInfo[],
   marquee: ["Ear", "Nose", "Throat", "Allergy", "Hearing", "Sinus", "Voice"],
+};
+
+/** Rust "Visit the Chamber" band. `schedule` is also the source for the JSON-LD opening hours. */
+export type ChamberDay = {
+  day: "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";
+  open: string | null; // "HH:MM" 24h, Asia/Kolkata; null = closed
+  close: string | null;
+};
+
+export const chamber = {
+  eyebrow: "Chamber & timings",
+  titleLine1: "Visit the",
+  titleLine2: "Chamber", // lime
+  intro: "Consultations run every afternoon and evening except Sunday at Nightingale Hospital, Meherpur.",
+  hospital: "Nightingale Hospital",
+  address: "Meherpur, Silchar, Assam", // TODO (not shown as TODO): full street address + PIN from the doctor
+  mapsQuery: "Nightingale Hospital Meherpur Silchar",
+  timeZone: "Asia/Kolkata",
+  schedule: [
+    { day: "Monday", open: "14:30", close: "21:00" },
+    { day: "Tuesday", open: "14:30", close: "21:00" },
+    { day: "Wednesday", open: "14:30", close: "21:00" },
+    { day: "Thursday", open: "14:30", close: "21:00" },
+    { day: "Friday", open: "14:30", close: "21:00" },
+    { day: "Saturday", open: "14:30", close: "21:00" },
+    { day: "Sunday", open: null, close: null },
+  ] as ChamberDay[],
+  fee: site.fee,
+  feeNote: "Paid at the clinic",
+  bringList: ["Old prescriptions and test reports", "List of medicines you take now", "Hearing test or X-ray/CT reports, if any"],
+  whatsappMessage: "Hello Doctor, I'd like to book an appointment at Nightingale Hospital, Meherpur.",
 };
 
 
