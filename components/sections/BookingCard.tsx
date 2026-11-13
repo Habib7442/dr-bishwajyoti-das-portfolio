@@ -22,6 +22,14 @@ const inputBase =
 const labelBase = "mb-1.5 block text-xs font-medium text-rust";
 
 const noopSubscribe = () => () => {};
+
+/** below md: short time-slot labels in the select */
+const PHONE_MQ = "(max-width: 767.98px)";
+const subscribePhone = (cb: () => void) => {
+  const mq = window.matchMedia(PHONE_MQ);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+};
 const fieldId = (k: keyof BookingForm) => `bk-${k}`;
 const errorId = (k: keyof BookingForm) => `bk-${k}-error`;
 
@@ -36,6 +44,7 @@ export function BookingCard() {
   const chipRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const waReady = whatsappUrl("") !== null;
+  const isPhone = useSyncExternalStore(subscribePhone, () => window.matchMedia(PHONE_MQ).matches, () => false);
 
   // "today" is read only on the client: undefined during prerender (cacheComponents), real value after hydration
   const minDate = useSyncExternalStore(noopSubscribe, () => nowInChamberTz().today, () => undefined);
@@ -124,7 +133,7 @@ export function BookingCard() {
   const selectedIdx = booking.problems.indexOf(form.problem as Problem);
 
   return (
-    <div className="w-full max-w-[440px] rounded-[28px] border border-white/80 bg-white/60 p-6 backdrop-blur-xl lg:p-7">
+    <div className="w-full max-w-[440px] rounded-[28px] border border-white/80 bg-white/60 p-5 backdrop-blur-xl md:p-6 lg:p-7">
       {done ? (
         <div className="flex min-h-[380px] flex-col items-center justify-center text-center">
           <span className="grid size-16 place-items-center rounded-full bg-lime text-rust">
@@ -220,7 +229,7 @@ export function BookingCard() {
                       onClick={() => update("problem", p)}
                       onKeyDown={(e) => onChipKey(e, idx)}
                       className={cn(
-                        "h-11 rounded-full px-3.5 text-[13px] font-medium transition-colors focus-visible:ring-2 focus-visible:ring-lime focus-visible:outline-rust",
+                        "h-9 rounded-full px-3 text-[13px] font-medium transition-colors md:h-11 md:px-3.5 focus-visible:ring-2 focus-visible:ring-lime focus-visible:outline-rust",
                         checked ? "bg-rust text-white" : "border border-rust/20 bg-white/85 text-rust hover:border-rust/50",
                       )}
                     >
@@ -233,7 +242,7 @@ export function BookingCard() {
             </div>
 
             {/* Date + time */}
-            <div className="grid gap-3.5 sm:grid-cols-2">
+            <div className="grid grid-cols-2 gap-3 md:gap-3.5">
               <div>
                 <label htmlFor={fieldId("date")} className={labelBase}>
                   Preferred date
@@ -245,7 +254,7 @@ export function BookingCard() {
                   min={minDate}
                   value={form.date}
                   onChange={(e) => update("date", e.target.value)}
-                  className={cn(inputBase, "appearance-none [&::-webkit-date-and-time-value]:text-left")}
+                  className={cn(inputBase, "appearance-none max-md:px-3 max-md:text-[14px] max-md:[&::-webkit-calendar-picker-indicator]:size-[18px] max-md:[&::-webkit-calendar-picker-indicator]:m-0 max-md:[&::-webkit-calendar-picker-indicator]:p-0 md:[&::-webkit-calendar-picker-indicator]:ml-1 [&::-webkit-date-and-time-value]:text-left")}
                 />
                 {errorText("date")}
               </div>
@@ -259,14 +268,14 @@ export function BookingCard() {
                     required
                     value={form.slot}
                     onChange={(e) => update("slot", e.target.value as BookingForm["slot"])}
-                    className={cn(inputBase, "appearance-none pr-10", !form.slot && "text-ink/45")}
+                    className={cn(inputBase, "appearance-none pr-10 max-md:pl-3 max-md:text-[14px]", !form.slot && "text-ink/45")}
                   >
                     <option value="" disabled>
                       Pick a slot
                     </option>
-                    {booking.timeSlots.map((s) => (
+                    {booking.timeSlots.map((s, idx) => (
                       <option key={s} value={s} className="text-ink">
-                        {s}
+                        {isPhone ? booking.timeSlotsShort[idx] : s}
                       </option>
                     ))}
                   </select>

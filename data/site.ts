@@ -40,7 +40,7 @@ export const site = {
 
   phone: "+91 98643 71333", // e.g. "+91 98XXXXXXXX"
   whatsapp: "9864371333", // 10-digit Indian mobile number, no +91 (e.g. "98XXXXXXXX"); links add 91 automatically
-  whatsappMessage: "Hello Doctor, I would like to book an appointment.",
+  whatsappMessage: "Hello Doctor, I'd like to book an appointment.",
   onlineBooking: "https://www.quickobook.com/chamber?doctorId=226615",
   mapEmbed: "TODO", // Google Maps → Share → Embed a map → copy the src="..." URL
   mapLink: "https://www.google.com/maps/search/?api=1&query=Nightingale+Hospital+Meherpur+Silchar",
@@ -60,10 +60,41 @@ export const quickFacts = {
   fee: "Fee ₹500",
 };
 
+/** Shorter quick-fact labels for phones (below md) */
+export const quickFactsShort: Record<keyof typeof quickFacts, string> = {
+  place: "Nightingale Hospital",
+  hours: "Mon–Sat · 2:30–9 PM",
+  fee: "₹500",
+};
+
+/** Rust intro band under the hero. Stats whose value starts with TODO are hidden. */
+export type IntroLine = { text: string; indent: 0 | 1; asterisk?: boolean; accent?: boolean; pill?: string };
+export type IntroStat = { value: string; label: string };
+
+export const intro = {
+  statementLines: [
+    { text: "Expert care for your", indent: 0 },
+    { text: "ear, nose & throat", indent: 1, asterisk: true },
+    { text: "and every", indent: 0 },
+    // lime word + small round image after it; file lives in /public (ear-icon fallback while missing)
+    { text: "allergy", indent: 0, accent: true, pill: "/images/intro-pill.webp" },
+  ] as IntroLine[],
+  paragraph:
+    "From blocked ears and sinus trouble to throat infections and allergies, Dr. Biswajyoti Das listens carefully, explains clearly and treats gently — for children, adults and seniors.",
+  ctaLabel: "Book Appointment",
+  stats: [
+    { value: site.experienceYears, label: "Years of experience" },
+    { value: "TODO", label: "Patients treated" },
+    { value: "6 days", label: "Open every week" },
+  ] as IntroStat[],
+};
+
 /** Booking form options (WhatsApp booking card in the hero) */
 export const booking = {
   problems: ["Ear", "Nose", "Throat", "Allergy", "Other"] as const,
   timeSlots: ["2:30–4:00 PM", "4:00–6:00 PM", "6:00–7:30 PM", "7:30–9:00 PM"] as const,
+  /** labels shown in the select on phones; the WhatsApp message always uses the full slot */
+  timeSlotsShort: ["2:30–4", "4–6", "6–7:30", "7:30–9"] as const,
   /** same-day bookings allowed only before this hour (24h, Asia/Kolkata) */
   sameDayCutoffHour: 9,
   /** 0 = Sunday */

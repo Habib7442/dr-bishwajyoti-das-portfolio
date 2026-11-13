@@ -1,4 +1,6 @@
+import { FloatingWhatsApp } from "@/components/sections/FloatingWhatsApp";
 import { Hero } from "@/components/sections/Hero";
+import { Intro } from "@/components/sections/Intro";
 import { Navbar } from "@/components/sections/Navbar";
 import { nav, site } from "@/data/site";
 
@@ -10,7 +12,9 @@ export default function Home() {
       <Navbar name={site.name} links={nav} />
       <main>
         <Hero />
+        <Intro />
       </main>
+      <FloatingWhatsApp />
     </>
   );
 }

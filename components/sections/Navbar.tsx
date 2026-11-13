@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { Menu, X } from "lucide-react";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { ease } from "@/lib/motion";
+import { bookNow } from "@/lib/scroll-to-booking";
 import { cn } from "@/lib/utils";
 
 type Props = { name: string; links: { label: string; href: string }[] };
@@ -13,12 +14,6 @@ type Props = { name: string; links: { label: string; href: string }[] };
 const BG_THRESHOLD = 8;
 const SHRINK_THRESHOLD = 80;
 
-/** Scroll to the hero booking card and put the cursor in the name field */
-function bookNow() {
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  document.getElementById("home")?.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
-  document.getElementById("bk-name")?.focus({ preventScroll: true });
-}
 
 export function Navbar({ name, links }: Props) {
   const [scrolled, setScrolled] = useState(false);

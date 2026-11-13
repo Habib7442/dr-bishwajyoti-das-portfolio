@@ -87,17 +87,3 @@ export function HeroHeadline({ lines, highlight }: { lines: string[]; highlight:
     </h1>
   );
 }
-
-/** Badge entrance: scale in at 1s (then the CSS spin takes over) */
-export function BadgeIn({ children, className }: { children: React.ReactNode; className?: string }) {
-  return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, scale: 0.6 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={transition(0.6, 1)}
-    >
-      {children}
-    </motion.div>
-  );
-}
