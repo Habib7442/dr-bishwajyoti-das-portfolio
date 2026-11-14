@@ -203,7 +203,7 @@ For UI tasks, also include:
   | 5 | Chamber | rust |
   | 6 | Who We Help | lilac |
   | 7 | Reviews | cream |
-  | 8 | FAQ | cream |
+  | 8 | FAQ | white |
   | 9 | CTA + Footer | lime |
 
 - Services is an accordion:

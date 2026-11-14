@@ -4,6 +4,8 @@
  * Swap image URLs for the doctor's real photos (put them in /public and use "/photo.jpg").
  */
 
+import { formatTime } from "@/lib/chamber-hours";
+
 const unsplash = (id: string) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1600&q=80`;
 
 export const site = {
@@ -25,7 +27,8 @@ export const site = {
   chamber: "Nightingale Hospital, Meherpur, Silchar, Assam",
   address: {
     hospital: "Nightingale Hospital",
-    street: "Meherpur",
+    street: "Meherpur Road, Birbal Bazar",
+    area: "Meherpur",
     locality: "Silchar",
     region: "Assam",
     postalCode: "788015", // verify Meherpur PIN
@@ -314,19 +317,56 @@ export const services: Service[] = [
 export const servicesVisible = 4;
 
 
-export const faqs = [
-  { q: "What is the consultation fee?", a: `The consultation fee is ${site.fee}, payable at the chamber.` },
-  { q: "What are the chamber timings?", a: `${site.days}, ${site.hours}, at ${site.chamber}.` },
-  {
-    q: "How do I book an appointment?",
-    a: "Send a message on WhatsApp, call the chamber, or book online through Quickobook. Walk-ins are seen as time allows, but booking ahead reduces waiting time.",
-  },
-  {
-    q: "Should I bring my old reports and prescriptions?",
-    a: "Yes. Please bring previous prescriptions, hearing test reports, X-rays, CT scans and a list of the medicines you currently take. They help avoid repeat tests.",
-  },
-  {
-    q: "Are children seen at the chamber?",
-    a: "Yes. Children of all ages are seen for ear infections, tonsils, adenoids, blocked nose and hearing concerns. Please come with a parent or guardian.",
-  },
-];
+/** White FAQ band. Answers are built from the data above so facts stay in sync; also the source of the FAQPage JSON-LD. */
+export type FaqItem = { id: string; q: string; a: string };
+
+const closedDays = chamber.schedule.filter((d) => d.open === null).map((d) => d.day);
+const sameDayCutoff = formatTime(`${String(booking.sameDayCutoffHour).padStart(2, "0")}:00`);
+const fullAddress = `${site.address.hospital}, ${site.address.street}, ${site.address.area}, ${site.address.locality}, ${site.address.region} ${site.address.postalCode}`;
+
+export const faq = {
+  eyebrow: "Good to know",
+  titleLead: "Questions patients",
+  titleAccent: "ask",
+  intro: "Can't find your answer? Message us on WhatsApp and we'll help.",
+  whatsappMessage: "Hello, I have a question about an appointment.",
+  items: [
+    {
+      id: "timings",
+      q: "What are the consultation timings?",
+      a: `${site.name} sees patients ${site.days}, ${site.hours}, at ${site.address.hospital}, ${site.address.area}, ${site.address.locality}.${
+        closedDays.length ? ` The chamber is closed on ${closedDays.join(" and ")}s.` : ""
+      }`,
+    },
+    {
+      id: "fee",
+      q: "What is the consultation fee?",
+      a: `The consultation fee is ${site.fee}, ${chamber.feeNote.charAt(0).toLowerCase()}${chamber.feeNote.slice(1)}.`,
+    },
+    {
+      id: "booking",
+      q: "How do I book an appointment?",
+      a: "Fill in the booking form at the top of this page and send it on WhatsApp, call us, or book online through Quickobook. Online booking has a small confirmation fee charged by the booking platform.",
+    },
+    {
+      id: "same-day",
+      q: "Can I book for the same day?",
+      a: `Yes. For same-day online booking, please book before ${sameDayCutoff}. You can also call or message us on WhatsApp.`,
+    },
+    {
+      id: "children",
+      q: "Does the doctor see children?",
+      a: "Yes. Dr. Das treats children, adults and senior citizens, including ear infections, tonsils, adenoids and blocked noses in children.",
+    },
+    {
+      id: "bring",
+      q: "What should I bring to my appointment?",
+      a: "Please bring your old prescriptions, any test reports (hearing tests, X-ray or CT scans) and a list of the medicines you are taking now.",
+    },
+    {
+      id: "location",
+      q: "Where exactly is the chamber?",
+      a: `At ${fullAddress}. Use the map above for directions.`,
+    },
+  ] as FaqItem[],
+};

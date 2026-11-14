@@ -1,5 +1,6 @@
 import { About } from "@/components/sections/About";
 import { Chamber } from "@/components/sections/Chamber";
+import { Faq } from "@/components/sections/Faq";
 import { FloatingWhatsApp } from "@/components/sections/FloatingWhatsApp";
 import { Hero } from "@/components/sections/Hero";
 import { Intro } from "@/components/sections/Intro";
@@ -27,6 +28,7 @@ export default function Home() {
         <Chamber />
         <WhoWeHelp />
         <Reviews />
+        <Faq />
       </main>
       <FloatingWhatsApp />
     </>

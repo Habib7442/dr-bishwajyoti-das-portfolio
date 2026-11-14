@@ -57,7 +57,7 @@ Register them in the Tailwind v4 `@theme` block, so classes like `bg-rust`, `tex
 | 5 | Chamber & timings | rust | white | white/80 | lime |
 | 6 | Who we help | lilac | rust | ink | — |
 | 7 | Reviews | cream | rust | ink | tag pills |
-| 8 | FAQ | cream (continued) | rust | ink | — |
+| 8 | FAQ | white (clean break before the lime CTA) | ink (accent word rust + lime highlighter) | ink/75 | — |
 | 9 | CTA + Footer | lime | rust | rust | rust button |
 
 ### Contrast rules (WCAG AA)

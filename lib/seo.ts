@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { chamber, site } from "@/data/site";
+import { chamber, faq, site } from "@/data/site";
 import { openingHoursSpec } from "@/lib/chamber-hours";
 import { isTodo } from "@/lib/site-helpers";
 
@@ -75,7 +75,7 @@ const telephone = isTodo(site.phone) ? undefined : site.phone.replace(/\s/g, "")
 
 const address = {
   "@type": "PostalAddress",
-  streetAddress: `${site.address.hospital}, ${site.address.street}`,
+  streetAddress: `${site.address.hospital}, ${site.address.street}, ${site.address.area}`,
   addressLocality: site.address.locality,
   addressRegion: site.address.region,
   postalCode: site.address.postalCode,
@@ -89,7 +89,13 @@ const ids = {
   physician: `${site.url}/#physician`,
   clinic: `${site.url}/#clinic`,
   website: `${site.url}/#website`,
+  faq: `${site.url}/#faq`,
 };
+
+// same strings the FAQ section shows, so markup always matches visible content; TODO answers are skipped
+const faqEntities = faq.items
+  .filter((f) => !/TODO/i.test(f.q) && !/TODO/i.test(f.a))
+  .map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } }));
 
 export function buildJsonLd() {
   return {
@@ -135,6 +141,13 @@ export function buildJsonLd() {
         name: site.name,
         inLanguage: "en-IN",
         publisher: { "@id": ids.physician },
+      },
+      {
+        "@type": "FAQPage",
+        "@id": ids.faq,
+        inLanguage: "en-IN",
+        about: { "@id": ids.physician },
+        mainEntity: faqEntities,
       },
     ],
   };
