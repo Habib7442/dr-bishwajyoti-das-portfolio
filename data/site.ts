@@ -239,6 +239,8 @@ export type ServiceIcon = "Ear" | "Wind" | "Flower2" | "Mic" | "RotateCw" | "Bed
 export type Service = {
   slug: string;
   title: string;
+  /** label used in the footer "Treatments" column */
+  shortTitle?: string;
   short: string;
   image: string;
   imageAlt: string;
@@ -250,6 +252,7 @@ export type Service = {
 export const services: Service[] = [
   {
     slug: "ear",
+    shortTitle: "Ear & Hearing",
     title: "Ear Problems & Hearing Loss",
     short: "Ear pain, discharge, ringing in the ears, blocked ears and hearing loss in children and adults.",
     image: "/images/services/ear.webp",
@@ -259,6 +262,7 @@ export const services: Service[] = [
   },
   {
     slug: "sinus",
+    shortTitle: "Sinus",
     title: "Sinus & Nasal Blockage",
     short: "Sinusitis, blocked nose, frequent colds, nasal polyps and a bent nasal septum.",
     image: "/images/services/sinus.webp",
@@ -268,6 +272,7 @@ export const services: Service[] = [
   },
   {
     slug: "allergy",
+    shortTitle: "Allergy",
     title: "Allergy Testing & Treatment",
     short: "Sneezing, runny nose, itchy eyes and dust or seasonal allergies. The cause is traced through testing, then treated.",
     image: "/images/services/allergy.webp",
@@ -277,6 +282,7 @@ export const services: Service[] = [
   },
   {
     slug: "throat",
+    shortTitle: "Throat & Voice",
     title: "Tonsils, Throat & Voice",
     short: "Sore throat, tonsillitis, adenoids in children, hoarse voice and swallowing problems.",
     image: "/images/services/throat.webp",
@@ -286,6 +292,7 @@ export const services: Service[] = [
   },
   {
     slug: "vertigo",
+    shortTitle: "Vertigo",
     title: "Vertigo & Dizziness",
     short: "Spinning sensation, imbalance and dizziness linked to the inner ear.",
     image: "/images/services/vertigo.webp",
@@ -322,7 +329,7 @@ export type FaqItem = { id: string; q: string; a: string };
 
 const closedDays = chamber.schedule.filter((d) => d.open === null).map((d) => d.day);
 const sameDayCutoff = formatTime(`${String(booking.sameDayCutoffHour).padStart(2, "0")}:00`);
-const fullAddress = `${site.address.hospital}, ${site.address.street}, ${site.address.area}, ${site.address.locality}, ${site.address.region} ${site.address.postalCode}`;
+export const fullAddress = `${site.address.hospital}, ${site.address.street}, ${site.address.area}, ${site.address.locality}, ${site.address.region} ${site.address.postalCode}`;
 
 export const faq = {
   eyebrow: "Good to know",
@@ -369,4 +376,58 @@ export const faq = {
       a: `At ${fullAddress}. Use the map above for directions.`,
     },
   ] as FaqItem[],
+};
+
+/** Directions from the visitor's location (Google Maps, new tab) */
+export const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(chamber.mapsQuery)}`;
+
+/** Lime CTA band + footer. Social links still starting with TODO are hidden (the whole "Follow" block if all are). */
+export type SocialKey = "facebook" | "instagram" | "youtube" | "google";
+
+export const footer = {
+  ctaTitle: "Book your appointment today",
+  ctaText: `${quickFacts.hours} · ${quickFacts.place}`,
+  whatsappMessage: site.whatsappMessage,
+  tagline: "ENT & Allergy Specialist in Silchar. Caring treatment for ear, nose, throat and allergy problems.",
+  social: {
+    facebook: "TODO",
+    instagram: "TODO",
+    youtube: "TODO",
+    google: "TODO", // Google Business Profile link
+  } as Record<SocialKey, string>,
+  credit: { label: "Website by Locallify", href: "https://locallifyagency.com" },
+  disclaimer: "Information on this website is for general awareness and is not a substitute for a medical consultation.",
+  closedNote: closedDays.length ? `${closedDays.join(" & ")} closed` : "",
+};
+
+/** /privacy page. TODO (not shown on the page): review with the doctor before launch. */
+export const privacy = {
+  title: "Privacy Policy",
+  lastUpdated: "14 November 2026", // change when the text below changes
+  sections: [
+    {
+      heading: "What the booking form collects",
+      body: [
+        "The booking form on the home page asks for your name, phone number, the problem you want to see the doctor about, a preferred date and time, and an optional note.",
+      ],
+    },
+    {
+      heading: "How your details are used",
+      body: [
+        "Nothing you type into the form is stored on this website or sent to our server. When you tap “Book on WhatsApp”, WhatsApp opens with your details written into a message. The message is only sent if you choose to send it from WhatsApp.",
+        "We use the details you send only to arrange your appointment.",
+      ],
+    },
+    {
+      heading: "Third-party services",
+      body: [
+        "This website links to or embeds services run by other companies: WhatsApp (messages), Google Maps (the map and directions) and Quickobook (online booking). When you use them, their own privacy policies apply.",
+      ],
+    },
+    {
+      heading: "Cookies and tracking",
+      body: ["This website does not use analytics or tracking cookies."],
+    },
+  ],
+  contactLead: "Questions about your information? Call",
 };

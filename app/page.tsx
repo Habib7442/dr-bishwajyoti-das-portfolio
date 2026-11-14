@@ -1,6 +1,8 @@
 import { About } from "@/components/sections/About";
 import { Chamber } from "@/components/sections/Chamber";
+import { Cta } from "@/components/sections/Cta";
 import { Faq } from "@/components/sections/Faq";
+import { Footer } from "@/components/sections/Footer";
 import { FloatingWhatsApp } from "@/components/sections/FloatingWhatsApp";
 import { Hero } from "@/components/sections/Hero";
 import { Intro } from "@/components/sections/Intro";
@@ -29,7 +31,9 @@ export default function Home() {
         <WhoWeHelp />
         <Reviews />
         <Faq />
+        <Cta />
       </main>
+      <Footer />
       <FloatingWhatsApp />
     </>
   );

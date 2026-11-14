@@ -9,22 +9,37 @@ import { ease } from "@/lib/motion";
 /**
  * Phones only (below md): lime WhatsApp button, bottom-right.
  * Hidden while the hero (and its booking card) is on screen; slides + fades in once you've scrolled past it.
+ * Hidden again while the lime CTA band (#book) or the footer is on screen, so it never covers them.
  *
  * Observes the whole hero, not the card: the hero is always intersecting on load, so leaving it always fires a
  * callback. The card can start below the fold, and a fast fling / anchor jump past it never changes its
  * intersection state, so observing the card alone could leave the button hidden.
  */
 export function FloatingWhatsApp() {
-  const [show, setShow] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
+  const [atEnd, setAtEnd] = useState(false);
+  const show = pastHero && !atEnd;
 
   useEffect(() => {
     const hero = document.getElementById("home");
     if (!hero) return;
-    const io = new IntersectionObserver(([entry]) => {
-      setShow(!entry.isIntersecting && entry.boundingClientRect.top < 0);
+    const heroIo = new IntersectionObserver(([entry]) => {
+      setPastHero(!entry.isIntersecting && entry.boundingClientRect.top < 0);
     });
-    io.observe(hero);
-    return () => io.disconnect();
+    heroIo.observe(hero);
+
+    const ends = ["book", "site-footer"].map((id) => document.getElementById(id)).filter((el): el is HTMLElement => !!el);
+    const visible = new Set<Element>();
+    const endIo = new IntersectionObserver((entries) => {
+      entries.forEach((e) => (e.isIntersecting ? visible.add(e.target) : visible.delete(e.target)));
+      setAtEnd(visible.size > 0);
+    });
+    ends.forEach((el) => endIo.observe(el));
+
+    return () => {
+      heroIo.disconnect();
+      endIo.disconnect();
+    };
   }, []);
 
   const label = whatsappNumber ? "Book on WhatsApp" : "Book online";

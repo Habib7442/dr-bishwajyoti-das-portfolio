@@ -85,7 +85,7 @@
   }
   html {
     @apply font-sans scroll-smooth;
-    scroll-padding-top: 5rem;
+    scroll-padding-top: 6rem; /* fixed navbar offset for #anchors (96px) */
   }
   body {
     @apply bg-background text-foreground;

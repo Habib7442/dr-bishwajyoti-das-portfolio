@@ -39,8 +39,9 @@ Main user flow: land on the hero → scan the services → read about the doctor
 11. Footer
 12. Floating WhatsApp button (mobile only)
 13. SEO: metadata, JSON-LD, `sitemap.ts`, `robots.ts`, `opengraph-image.tsx`
+14. `/privacy`: a simple privacy policy page (navbar, text column, footer), the only page besides `/`
 
-Do not overbuild. No blog, no CMS, no admin panel, no login, no database, no contact-form backend, no extra pages, no dark mode, no i18n, no analytics unless asked.
+Do not overbuild. No blog, no CMS, no admin panel, no login, no database, no contact-form backend, no extra pages (beyond `/privacy`), no dark mode, no i18n, no analytics unless asked.
 
 ---
 

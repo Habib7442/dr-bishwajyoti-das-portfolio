@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion";
@@ -153,6 +153,7 @@ function RowGroup({ rows, offset, animateOpen, shown }: { rows: ServiceRow[]; of
       {rows.map((s, i) => (
         <motion.div
           key={s.slug}
+          id={`services-${s.slug}`}
           variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease } } }}
         >
           <Row s={s} index={offset + i} animateOpen={animateOpen} />
@@ -178,6 +179,28 @@ export function ServicesList({ rows, visible }: { rows: ServiceRow[]; visible: n
   const first = rows.slice(0, visible);
   const more = rows.slice(visible);
 
+  // footer "Treatments" links: #services-<slug> opens that row (revealing hidden rows first) and scrolls to it
+  useEffect(() => {
+    const openFromHash = () => {
+      const slug = decodeURIComponent(window.location.hash).match(/^#services-(.+)$/)?.[1];
+      const index = rows.findIndex((r) => r.slug === slug);
+      if (!slug || index < 0) return;
+      setTouched(true);
+      setOpen([slug]);
+      if (index >= visible) setShowAll(true);
+      const instant = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      // wait for hidden rows to render, then scroll the row into view
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => {
+          document.getElementById(`services-${slug}`)?.scrollIntoView({ behavior: instant ? "auto" : "smooth", block: "start" });
+        }),
+      );
+    };
+    openFromHash();
+    window.addEventListener("hashchange", openFromHash);
+    return () => window.removeEventListener("hashchange", openFromHash);
+  }, [rows, visible]);
+
   const toggleAll = () => {
     const next = !showAll;
     setShowAll(next);
@@ -185,7 +208,7 @@ export function ServicesList({ rows, visible }: { rows: ServiceRow[]; visible: n
       // wait for the rows to render, then bring the first new one into view
       requestAnimationFrame(() =>
         requestAnimationFrame(() => {
-          document.getElementById(`service-${more[0]?.slug}`)?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+          document.getElementById(`services-${more[0]?.slug}`)?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
         }),
       );
     }
@@ -208,7 +231,7 @@ export function ServicesList({ rows, visible }: { rows: ServiceRow[]; visible: n
                 more.map((s, i) => (
                   <motion.div
                     key={s.slug}
-                    id={`service-${s.slug}`}
+                    id={`services-${s.slug}`}
                     initial={{ opacity: 0, y: 24 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, ease, delay: i * 0.08 }}
