@@ -231,66 +231,87 @@ export const nav = [
   { label: "Contact", href: "#contact" },
 ];
 
-export type Service = { slug: string; title: string; description: string; image: { src: string; alt: string } };
+/** Cream "Our Services" accordion. `problem` pre-selects the hero form's chip from "Book for this →". */
+export type ServiceIcon = "Ear" | "Wind" | "Flower2" | "Mic" | "RotateCw" | "BedDouble" | "ScanEye";
+export type Service = {
+  slug: string;
+  title: string;
+  short: string;
+  image: string;
+  imageAlt: string;
+  icon: ServiceIcon;
+  problem: (typeof booking.problems)[number];
+};
 
+// TODO (not shown on the page): the doctor must confirm this list before launch; remove anything he doesn't offer
 export const services: Service[] = [
   {
-    slug: "ear-hearing",
+    slug: "ear",
     title: "Ear Problems & Hearing Loss",
-    description:
-      "Ear pain, discharge, ringing in the ears (tinnitus) and gradual or sudden hearing loss are examined in detail, with hearing tests arranged when needed and a clear plan for treatment or hearing aids.",
-    image: { src: unsplash("1631815588090-d4bfec5b1ccb"), alt: "Doctor examining a patient" },
+    short: "Ear pain, discharge, ringing in the ears, blocked ears and hearing loss in children and adults.",
+    image: "/images/services/ear.webp",
+    imageAlt: "Illustration of a woman cupping her ear, struggling to hear",
+    icon: "Ear",
+    problem: "Ear",
   },
   {
-    slug: "sinus-nasal",
-    title: "Sinusitis & Nasal Blockage",
-    description:
-      "Long-standing blocked nose, sinus headaches, facial pressure, nasal polyps and a deviated septum are assessed and treated with medicines first, and with endoscopic procedures when they are truly needed.",
-    image: { src: unsplash("1588776814546-1ffcf47267a5"), alt: "Doctor reviewing scan images" },
+    slug: "sinus",
+    title: "Sinus & Nasal Blockage",
+    short: "Sinusitis, blocked nose, frequent colds, nasal polyps and a bent nasal septum.",
+    image: "/images/services/sinus.webp",
+    imageAlt: "Illustration of a man pressing the sides of his nose from sinus pressure",
+    icon: "Wind",
+    problem: "Nose",
   },
   {
     slug: "allergy",
     title: "Allergy Testing & Treatment",
-    description:
-      "Sneezing, runny nose, itchy eyes and seasonal allergies are traced to their triggers through allergy testing, followed by a practical plan covering avoidance, medication and immunotherapy where suitable.",
-    image: { src: unsplash("1576091160550-2173dba999ef"), alt: "Stethoscope on a desk beside a laptop" },
+    short: "Sneezing, runny nose, itchy eyes and dust or seasonal allergies. The cause is traced through testing, then treated.",
+    image: "/images/services/allergy.webp",
+    imageAlt: "Illustration of a woman sneezing into a tissue near flowers",
+    icon: "Flower2",
+    problem: "Allergy",
   },
   {
-    slug: "throat-voice",
-    title: "Tonsils, Throat & Voice Problems",
-    description:
-      "Recurrent sore throat, tonsillitis, hoarseness, voice strain and difficulty swallowing are evaluated, including scope examination of the voice box for teachers, singers and anyone with a persistent change in voice.",
-    image: { src: unsplash("1666214280557-f1b5022eb634"), alt: "Doctor explaining a scan on a screen" },
+    slug: "throat",
+    title: "Tonsils, Throat & Voice",
+    short: "Sore throat, tonsillitis, adenoids in children, hoarse voice and swallowing problems.",
+    image: "/images/services/throat.webp",
+    imageAlt: "Illustration of a man holding his sore throat with a cup of warm tea",
+    icon: "Mic",
+    problem: "Throat",
   },
   {
     slug: "vertigo",
     title: "Vertigo & Dizziness",
-    description:
-      "Spinning sensations, imbalance and dizziness often start in the inner ear. Bedside tests find the cause, and treatments such as repositioning manoeuvres and balance exercises help bring steadiness back.",
-    image: { src: unsplash("1559757148-5c350d0d3c56"), alt: "Anatomical model used to explain the inner ear and brain" },
+    short: "Spinning sensation, imbalance and dizziness linked to the inner ear.",
+    image: "/images/services/vertigo.webp",
+    imageAlt: "Illustration of a woman feeling dizzy and steadying herself on a chair",
+    icon: "RotateCw",
+    problem: "Ear",
   },
   {
     slug: "snoring",
     title: "Snoring & Sleep Problems",
-    description:
-      "Loud snoring, mouth breathing and daytime tiredness can point to a blocked airway. The nose, throat and palate are checked to find where the blockage is and how best to open it up.",
-    image: { src: unsplash("1666214280391-8ff5bd3c0bf0"), alt: "Doctors discussing results at a computer" },
+    short: "Loud snoring, mouth breathing and disturbed sleep caused by nose or throat blockage.",
+    image: "/images/services/snoring.webp",
+    imageAlt: "Illustration of a man snoring while his wife covers her ear",
+    icon: "BedDouble",
+    problem: "Nose",
   },
   {
-    slug: "ear-wax-infection",
-    title: "Ear Wax Removal & Ear Infections",
-    description:
-      "Impacted wax is removed safely under direct vision, never with cotton buds, and outer and middle ear infections in children and adults are treated quickly to protect hearing.",
-    image: { src: unsplash("1505751172876-fa1923c5c528"), alt: "Close-up of a stethoscope" },
-  },
-  {
-    slug: "endoscopic",
-    title: "Endoscopic ENT Procedures",
-    description:
-      "Diagnostic nasal and throat endoscopy in the chamber, plus minimally invasive endoscopic sinus and ENT surgery when it is needed, with smaller cuts, less pain and a quicker recovery.",
-    image: { src: unsplash("1551601651-2a8555f1a136"), alt: "Surgical team performing a procedure" },
+    slug: "endoscopy",
+    title: "Endoscopic ENT Check-ups",
+    short: "A quick camera check of the nose and throat, done in the chamber, for a clear diagnosis.",
+    image: "/images/services/endoscopy.webp",
+    imageAlt: "Illustration of a calm patient having a nasal endoscopy check-up",
+    icon: "ScanEye",
+    problem: "Other",
   },
 ];
+
+/** Rows shown before "See All" */
+export const servicesVisible = 4;
 
 
 export const faqs = [

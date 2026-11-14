@@ -172,7 +172,7 @@ function InfoBar() {
 
 export function About() {
   return (
-    <section id="about" aria-labelledby="about-title" className="relative overflow-hidden bg-lavender pt-24 pb-12 md:pt-36">
+    <section id="about" aria-labelledby="about-title" className="relative overflow-hidden bg-lavender pt-36 pb-12">
       <div className="mx-auto max-w-[1200px] px-6 lg:px-16">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">

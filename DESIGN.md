@@ -106,8 +106,8 @@ Register them in the Tailwind v4 `@theme` block, so classes like `bg-rust`, `tex
 |---|---|
 | Buttons, tags, nav pill | `rounded-full` |
 | Cards (who-we-help, reviews) | `24px` |
-| Service large image | `16px` |
-| Service thumbnail | `8px` |
+| Service large image | `24px` (20px on mobile), 16:10 |
+| Service thumbnail | `12px` (`rounded-xl`), 140×72 |
 | Doctor portrait (about) | full circle on a colored disc |
 | Chamber photo | **arch**: `border-radius: 999px 999px 999px 999px / 50% 50% 50% 50%`, or a tall pill shape with a thin lime outline offset by 8px |
 | Who-we-help images | one big soft corner per card (120px; others 22px): children top-right, adults top-left, seniors bottom-right. No blobs or circles (client request) |
@@ -136,9 +136,9 @@ Every button needs a visible focus ring: `focus-visible:ring-2 ring-offset-2 rin
 - `animation: spin 20s linear infinite`; stop it when `prefers-reduced-motion` is on.
 
 ### Service row
-- Thin `--line` borders top and bottom, row height ~96px.
-- Title on the left (H3, rust), thumbnail on the right (120×64, 8px radius).
-- **Open state:** grows to show a short description (Inter 13px, max 40ch) and a large image (320×200).
+- Thin `--line` borders top and bottom, row height 88px (mobile) / 104px (desktop).
+- Title on the left (Bricolage 400, `clamp(1.6rem, 3.4vw, 2.75rem)`, rust), thumbnail on the right (140×72, 12px radius; a lime + toggle on mobile).
+- **Open state** (click/tap): short description (Inter 15px, max 40ch) + "Book for this →" on the left, large 16:10 image (24px radius) on the right.
 - Only one row is open at a time; the first one is open by default.
 
 ### Doctor highlight card (About carousel)

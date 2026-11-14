@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import { motion } from "motion/react";
 import { ease } from "@/lib/motion";
-import { bookNow, type PrefillProblem } from "@/lib/scroll-to-booking";
 import { useReveal } from "@/lib/use-reveal";
 import { Highlighter } from "@/components/ui/highlighter";
 
@@ -83,22 +82,5 @@ export function ImageSettle({ children }: { children: React.ReactNode }) {
     >
       {children}
     </motion.div>
-  );
-}
-
-/** "Book for Children →": scrolls to the hero form with the matching chip selected; plain #home jump without JS */
-export function BookForLink({ problem, className, label, children }: { problem: PrefillProblem; className?: string; label: string; children: React.ReactNode }) {
-  return (
-    <a
-      href="#home"
-      aria-label={label}
-      className={className}
-      onClick={(e) => {
-        e.preventDefault();
-        bookNow(problem);
-      }}
-    >
-      {children}
-    </a>
   );
 }

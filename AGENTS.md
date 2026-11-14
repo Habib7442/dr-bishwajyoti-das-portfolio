@@ -209,7 +209,7 @@ For UI tasks, also include:
 - Services is an accordion:
   - Only one row is open at a time.
   - The first row is open by default.
-  - Rows expand on hover (on fine pointers) and on click or tap.
+  - Rows open on click or tap (no hover-open).
   - The round lime "See All" button sits on the cream→lavender curve divider and reveals the rest of the list.
 - About is a single-doctor block (not a team carousel), followed by a highlights carousel with prev/next arrows. No autoplay.
 - The rotating badge says "ENT • ALLERGY • SILCHAR •", with an ear icon in the center and a 20s linear spin. It appears in the hero only (the client asked for no badges on images or maps; the chamber band uses a map card).

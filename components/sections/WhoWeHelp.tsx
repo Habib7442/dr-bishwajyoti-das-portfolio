@@ -4,7 +4,8 @@ import Image from "next/image";
 import { ArrowRight, Baby, HeartHandshake, User, type LucideIcon } from "lucide-react";
 import { whoWeHelp, type WhoGroup } from "@/data/site";
 import { cn } from "@/lib/utils";
-import { BookForLink, CardItem, CardsGrid, FadeUpBlock, ImageSettle, WhoTitle } from "./WhoWeHelpMotion";
+import { BookForLink } from "@/components/ui/book-for-link";
+import { CardItem, CardsGrid, FadeUpBlock, ImageSettle, WhoTitle } from "./WhoWeHelpMotion";
 
 /** Local /public file present at build time? (icon fallback otherwise) */
 const publicFileExists = (src: string) => src.startsWith("/") && existsSync(join(process.cwd(), "public", src));
