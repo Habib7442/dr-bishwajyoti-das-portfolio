@@ -44,7 +44,7 @@ export function FadeIn({
   );
 }
 
-/** H1: words slide up (stagger 0.08s); the last line's word gets a lime highlighter sweep afterwards */
+/** H1: words slide up (stagger 0.08s); the last line's word gets a accent highlighter sweep afterwards */
 export function HeroHeadline({ lines, highlight }: { lines: string[]; highlight: string }) {
   const words = lines.map((l) => l.split(" "));
   const total = words.flat().length;
@@ -52,7 +52,7 @@ export function HeroHeadline({ lines, highlight }: { lines: string[]; highlight:
   let i = 0;
 
   return (
-    <h1 className="font-heading text-[clamp(2.75rem,6.5vw,5.5rem)] leading-[0.95] font-medium tracking-[-0.04em] text-rust">
+    <h1 className="font-heading text-[clamp(2.75rem,6.5vw,5.5rem)] leading-[0.95] font-medium tracking-[-0.04em] text-primary">
       {words.map((line, li) => (
         <span key={li} className="block">
           {line.map((word, wi) => {

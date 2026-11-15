@@ -63,16 +63,19 @@ export function RevealItem({
   className,
   children,
   role,
+  id,
 }: {
   as?: ItemTag;
   y?: number;
   className?: string;
   children: React.ReactNode;
   role?: string;
+  id?: string;
 }) {
   const M = itemTags[as];
   return (
     <M
+      id={id}
       className={className}
       role={role}
       variants={{ hidden: { opacity: 0, y }, show: { opacity: 1, y: 0, transition: { duration: 0.7, ease } } }}
@@ -139,8 +142,21 @@ const word: Variants = {
   show: (i: number) => ({ y: 0, opacity: 1, transition: { duration: WORD_DURATION, ease, delay: i * WORD_STAGGER } }),
 };
 
-/** h2: words slide up (0.06s stagger); the lime highlighter sweeps under the accent word 0.3s after the last word lands */
-export function StatementHeading({ id, lead, accent, className }: { id: string; lead: string; accent: string; className?: string }) {
+/** h2 (h1 on /about): words slide up (0.06s stagger); the accent highlighter sweeps under the accent word 0.3s after the last word lands */
+export function StatementHeading({
+  id,
+  lead,
+  accent,
+  className,
+  as = "h2",
+}: {
+  id: string;
+  lead: string;
+  accent: string;
+  className?: string;
+  as?: "h1" | "h2";
+}) {
+  const Heading = as === "h1" ? motion.h1 : motion.h2;
   const ref = useRef<HTMLHeadingElement>(null);
   const shown = useReveal(ref);
   const words = lead.split(" ");
@@ -153,7 +169,7 @@ export function StatementHeading({ id, lead, accent, className }: { id: string; 
     </span>
   );
   return (
-    <motion.h2 ref={ref} id={id} className={className} initial="hidden" animate={shown ? "show" : "hidden"}>
+    <Heading ref={ref} id={id} className={className} initial="hidden" animate={shown ? "show" : "hidden"}>
       {words.map((w, i) => (
         <span key={i}>
           {slot(w, i)}{" "}
@@ -165,8 +181,8 @@ export function StatementHeading({ id, lead, accent, className }: { id: string; 
           <Highlighter trigger="parent" delay={highlightDelay} />
         </>,
         words.length,
-        "relative z-0 text-rust",
+        "relative z-0 text-primary",
       )}
-    </motion.h2>
+    </Heading>
   );
 }

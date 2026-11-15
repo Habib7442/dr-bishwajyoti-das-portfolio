@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion";
@@ -14,19 +14,19 @@ import { BookForLink } from "@/components/ui/book-for-link";
 import { CurveDivider } from "@/components/shapes/CurveDivider";
 
 const icons: Record<ServiceIcon, LucideIcon> = { Ear, Wind, Flower2, Mic, RotateCw, BedDouble, ScanEye };
-const fallbackBg = ["bg-peach/40", "bg-butter/50", "bg-lilac"];
+const fallbackBg = ["bg-tint-1", "bg-tint-2", "bg-tint-3"];
 
 export type ServiceRow = Service & { hasImage: boolean };
 
 /* ── Mega title ───────────────────────────────────────────── */
 
 function Star({ className }: { className?: string }) {
-  // 8-armed asterisk: lime fill + rust outline so it reads on cream
+  // 8-armed asterisk: accent fill + primary outline so it reads on base
   return (
     <svg aria-hidden viewBox="0 0 100 100" className={cn("inline-block size-[0.7em] align-[-0.02em]", className)}>
       <path
         d="M44 4h12v31.5l22.3-22.3 8.5 8.5L64.5 44H96v12H64.5l22.3 22.3-8.5 8.5L56 64.5V96H44V64.5L21.7 86.8l-8.5-8.5L35.5 56H4V44h31.5L13.2 21.7l8.5-8.5L44 35.5z"
-        className="fill-lime stroke-rust"
+        className="fill-accent stroke-primary"
         strokeWidth={1.5}
         vectorEffect="non-scaling-stroke"
         strokeLinejoin="round"
@@ -63,10 +63,10 @@ export function MegaTitle({ id, text, className }: { id: string; text: string; c
 
 /* ── Accordion rows ───────────────────────────────────────── */
 
-function Fallback({ s, index, className }: { s: ServiceRow; index: number; className?: string }) {
+export function Fallback({ s, index, className }: { s: ServiceRow; index: number; className?: string }) {
   const Icon = icons[s.icon];
   return (
-    <span role="img" aria-label={s.imageAlt} className={cn("grid size-full place-items-center text-rust", fallbackBg[index % 3], className)}>
+    <span role="img" aria-label={s.imageAlt} className={cn("grid size-full place-items-center text-primary", fallbackBg[index % 3], className)}>
       <Icon aria-hidden className="size-1/3 max-h-16 max-w-16" strokeWidth={1.5} />
     </span>
   );
@@ -78,12 +78,12 @@ function Row({ s, index, animateOpen }: { s: ServiceRow; index: number; animateO
       {/* divider draws left → right */}
       <motion.span
         aria-hidden
-        className="absolute inset-x-0 top-0 h-px origin-left bg-rust/30"
+        className="absolute inset-x-0 top-0 h-px origin-left bg-primary/30"
         variants={{ hidden: { scaleX: 0 }, show: { scaleX: 1, transition: { duration: 0.8, ease, delay: index * 0.06 } } }}
       />
       <AccordionPrimitive.Header className="m-0">
-        <AccordionPrimitive.Trigger className="group/trigger flex h-[88px] w-full cursor-pointer items-center justify-between gap-6 rounded-sm text-left focus-visible:ring-2 focus-visible:ring-rust focus-visible:ring-offset-2 focus-visible:ring-offset-cream focus-visible:outline-none md:h-[104px]">
-          <span className="font-heading text-[clamp(1.6rem,3.4vw,2.75rem)] leading-[1.1] font-normal tracking-[-0.02em] text-rust transition-transform duration-300 ease-out md:group-hover/trigger:translate-x-2 motion-reduce:md:group-hover/trigger:translate-x-0">
+        <AccordionPrimitive.Trigger className="group/trigger flex h-[88px] w-full cursor-pointer items-center justify-between gap-6 rounded-sm text-left focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-base focus-visible:outline-none md:h-[104px]">
+          <span className="font-heading text-[clamp(1.6rem,3.4vw,2.75rem)] leading-[1.1] font-normal tracking-[-0.02em] text-primary transition-transform duration-300 ease-out md:group-hover/trigger:translate-x-2 motion-reduce:md:group-hover/trigger:translate-x-0">
             {s.title}
           </span>
           {/* desktop thumbnail, fades out while the row is open */}
@@ -100,7 +100,7 @@ function Row({ s, index, animateOpen }: { s: ServiceRow; index: number; animateO
           {/* mobile toggle: + rotates to × */}
           <span
             aria-hidden
-            className="grid size-9 shrink-0 place-items-center rounded-full bg-lime text-rust transition-transform duration-300 group-data-[panel-open]/trigger:rotate-45 md:hidden"
+            className="grid size-9 shrink-0 place-items-center rounded-full bg-accent text-primary transition-transform duration-300 group-data-[panel-open]/trigger:rotate-45 md:hidden"
           >
             <Plus className="size-4" strokeWidth={1.5} />
           </span>
@@ -126,7 +126,7 @@ function Row({ s, index, animateOpen }: { s: ServiceRow; index: number; animateO
             <BookForLink
               problem={s.problem}
               label={`Book an appointment for ${s.title}`}
-              className="group/link mt-6 inline-flex h-11 items-center gap-1.5 text-sm font-medium text-rust"
+              className="group/link mt-6 inline-flex h-11 items-center gap-1.5 text-sm font-medium text-primary"
             >
               <span className="underline-offset-4 group-hover/link:underline">Book for this</span>
               <ArrowRight
@@ -179,28 +179,6 @@ export function ServicesList({ rows, visible }: { rows: ServiceRow[]; visible: n
   const first = rows.slice(0, visible);
   const more = rows.slice(visible);
 
-  // footer "Treatments" links: #services-<slug> opens that row (revealing hidden rows first) and scrolls to it
-  useEffect(() => {
-    const openFromHash = () => {
-      const slug = decodeURIComponent(window.location.hash).match(/^#services-(.+)$/)?.[1];
-      const index = rows.findIndex((r) => r.slug === slug);
-      if (!slug || index < 0) return;
-      setTouched(true);
-      setOpen([slug]);
-      if (index >= visible) setShowAll(true);
-      const instant = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      // wait for hidden rows to render, then scroll the row into view
-      requestAnimationFrame(() =>
-        requestAnimationFrame(() => {
-          document.getElementById(`services-${slug}`)?.scrollIntoView({ behavior: instant ? "auto" : "smooth", block: "start" });
-        }),
-      );
-    };
-    openFromHash();
-    window.addEventListener("hashchange", openFromHash);
-    return () => window.removeEventListener("hashchange", openFromHash);
-  }, [rows, visible]);
-
   const toggleAll = () => {
     const next = !showAll;
     setShowAll(next);
@@ -248,7 +226,7 @@ export function ServicesList({ rows, visible }: { rows: ServiceRow[]; visible: n
         {/* closing line under the last visible row */}
         <motion.span
           aria-hidden
-          className="block h-px origin-left bg-rust/30"
+          className="block h-px origin-left bg-primary/30"
           initial={{ scaleX: 0 }}
           animate={{ scaleX: listShown ? 1 : 0 }}
           transition={{ duration: 0.8, ease, delay: Math.min(rows.length, visible) * 0.06 }}
@@ -256,14 +234,14 @@ export function ServicesList({ rows, visible }: { rows: ServiceRow[]; visible: n
       </div>
 
       <div ref={curveRef} className="relative mt-24">
-        <CurveDivider top="cream" bottom="lavender" className="-mb-px" />
+        <CurveDivider top="base" bottom="section" className="-mb-px" />
         {more.length > 0 && (
           <motion.button
             type="button"
             onClick={toggleAll}
             aria-expanded={showAll}
             aria-controls="services-more"
-            className="absolute bottom-0 left-1/2 z-20 grid size-24 -translate-x-1/2 translate-y-1/2 cursor-pointer place-items-center rounded-full bg-lime text-[13px] font-medium text-rust ring-8 ring-lime/30 transition-[scale,box-shadow] duration-200 ease-out hover:scale-[1.06] hover:ring-[12px] focus-visible:ring-rust focus-visible:outline-none md:size-28 motion-reduce:hover:scale-100"
+            className="absolute bottom-0 left-1/2 z-20 grid size-24 -translate-x-1/2 translate-y-1/2 cursor-pointer place-items-center rounded-full bg-accent text-[13px] font-medium text-primary ring-8 ring-accent/30 transition-[scale,box-shadow] duration-200 ease-out hover:scale-[1.06] hover:ring-[12px] focus-visible:ring-primary focus-visible:outline-none md:size-28 motion-reduce:hover:scale-100"
             initial={{ opacity: 0, scale: 0.6 }}
             animate={curveShown ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.6 }}
             transition={{ type: "spring", stiffness: 260, damping: 18 }}

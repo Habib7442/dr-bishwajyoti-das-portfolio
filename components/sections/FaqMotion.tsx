@@ -29,7 +29,7 @@ export function FaqList({ items }: { items: FaqItem[] }) {
         multiple
         hiddenUntilFound
         defaultValue={[items[0]?.id]}
-        className="divide-y divide-rust/15 border-y border-rust/15"
+        className="divide-y divide-primary/15 border-y border-primary/15"
       >
         {items.map((f) => (
           <motion.div key={f.id} variants={item}>
@@ -38,14 +38,14 @@ export function FaqList({ items }: { items: FaqItem[] }) {
               <AccordionPrimitive.Header className="m-0">
                 <AccordionPrimitive.Trigger
                   id={`faq-q-${f.id}`}
-                  className="group flex w-full cursor-pointer items-start justify-between gap-6 rounded-sm py-6 text-left focus-visible:ring-2 focus-visible:ring-rust focus-visible:ring-offset-2 focus-visible:outline-none"
+                  className="group flex w-full cursor-pointer items-start justify-between gap-6 rounded-sm py-6 text-left focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:outline-none"
                 >
-                  <span className="pt-1 font-heading text-[clamp(1.125rem,1.6vw,1.375rem)] leading-[1.3] font-medium text-ink transition-colors duration-200 [@media(hover:hover)_and_(pointer:fine)]:group-hover:text-rust">
+                  <span className="pt-1 font-heading text-[clamp(1.125rem,1.6vw,1.375rem)] leading-[1.3] font-medium text-ink transition-colors duration-200 [@media(hover:hover)_and_(pointer:fine)]:group-hover:text-primary">
                     {f.q}
                   </span>
                   <span
                     aria-hidden
-                    className="grid size-10 shrink-0 place-items-center rounded-full bg-cream text-rust transition-colors duration-300 group-data-[panel-open]:bg-rust group-data-[panel-open]:text-white"
+                    className="grid size-10 shrink-0 place-items-center rounded-full bg-base text-primary transition-colors duration-300 group-data-[panel-open]:bg-primary group-data-[panel-open]:text-white"
                   >
                     <Plus
                       className="size-5 transition-transform duration-300 group-data-[panel-open]:rotate-45 motion-reduce:transition-none"

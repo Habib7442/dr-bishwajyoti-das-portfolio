@@ -10,8 +10,21 @@ import { cn } from "@/lib/utils";
 
 /* ── Title ────────────────────────────────────────────────── */
 
-/** Two lines slide up (0.1s stagger); line 2 turns white → lime after it lands (CSS class toggle) */
-export function ChamberTitle({ id, line1, line2, className }: { id: string; line1: string; line2: string; className?: string }) {
+/** Two lines slide up (0.1s stagger); line 2 turns white → accent after it lands (CSS class toggle) */
+export function ChamberTitle({
+  id,
+  line1,
+  line2,
+  className,
+  as: Heading = "h2",
+}: {
+  id: string;
+  line1: string;
+  line2: string;
+  className?: string;
+  /** h1 on /chamber */
+  as?: "h1" | "h2";
+}) {
   const ref = useRef<HTMLHeadingElement>(null);
   const shown = useReveal(ref);
   const line = (text: string, i: number, extra?: string) => (
@@ -27,14 +40,14 @@ export function ChamberTitle({ id, line1, line2, className }: { id: string; line
     </span>
   );
   return (
-    <h2 ref={ref} id={id} className={className}>
+    <Heading ref={ref} id={id} className={className}>
       {line(line1, 0)}{" "}
       {line(
         line2,
         1,
-        cn("transition-colors duration-[400ms] motion-reduce:transition-none", shown ? "text-lime delay-[900ms]" : "text-white"),
+        cn("transition-colors duration-[400ms] motion-reduce:transition-none", shown ? "text-accent delay-[900ms]" : "text-white"),
       )}
-    </h2>
+    </Heading>
   );
 }
 
@@ -55,7 +68,7 @@ function useToday(timeZone: string) {
   return today;
 }
 
-/** Weekly hours as a <dl>; rows fade in (0.05s stagger), dividers draw left → right, today in lime */
+/** Weekly hours as a <dl>; rows fade in (0.05s stagger), dividers draw left → right, today in accent */
 export function ScheduleList({ schedule, timeZone, className }: { schedule: ScheduleDay[]; timeZone: string; className?: string }) {
   const ref = useRef<HTMLDListElement>(null);
   const shown = useReveal(ref);
@@ -68,7 +81,7 @@ export function ScheduleList({ schedule, timeZone, className }: { schedule: Sche
         return (
           <motion.div
             key={d.day}
-            className={cn("relative flex justify-between gap-4 py-3 text-[15px]", isToday ? "font-medium text-lime" : "text-white/90")}
+            className={cn("relative flex justify-between gap-4 py-3 text-[15px]", isToday ? "font-medium text-accent" : "text-white/90")}
             initial={{ opacity: 0 }}
             animate={{ opacity: shown ? 1 : 0 }}
             transition={{ duration: 0.5, ease, delay: i * 0.05 }}
@@ -144,16 +157,16 @@ export function MapCard({ src, title, placeName, className }: { src: string; tit
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
           allowFullScreen
-          className="absolute inset-0 h-full w-full border-0 [filter:saturate(0.85)_sepia(0.12)]"
+          className="absolute inset-0 h-full w-full border-0 saturate-[0.9]"
         />
       ) : (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center">
-          <MapPin aria-hidden className="size-10 text-rust" strokeWidth={1.5} />
-          <p className="font-heading text-lg font-medium text-rust">{placeName}</p>
+          <MapPin aria-hidden className="size-10 text-primary" strokeWidth={1.5} />
+          <p className="font-heading text-lg font-medium text-primary">{placeName}</p>
           <button
             type="button"
             onClick={() => setLoad(true)}
-            className="inline-flex h-11 items-center justify-center rounded-full bg-rust px-6 text-[13px] font-medium text-white transition duration-200 ease-out hover:bg-rust-dark"
+            className="inline-flex h-11 items-center justify-center rounded-full bg-primary px-6 text-[13px] font-medium text-white transition duration-200 ease-out hover:bg-primary-dark"
           >
             {desktop ? "Load map" : "Tap to load map"}
           </button>

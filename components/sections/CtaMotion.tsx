@@ -6,7 +6,7 @@ import { ease, wordReveal } from "@/lib/motion";
 import { useReveal } from "@/lib/use-reveal";
 
 /**
- * Lime CTA: title words slide up (stagger 0.06s), then the line + buttons fade up.
+ * Accent CTA: title words slide up (stagger 0.06s), then the line + buttons fade up.
  * Reduced motion: MotionConfig drops the translate, opacity fades stay.
  */
 export function CtaReveal({ id, title, children, className }: { id: string; title: string; children: React.ReactNode; className?: string }) {
@@ -19,7 +19,7 @@ export function CtaReveal({ id, title, children, className }: { id: string; titl
     <motion.div ref={ref} className={className} initial="hidden" animate={shown ? "show" : "hidden"}>
       <motion.h2
         id={id}
-        className="mx-auto max-w-[14ch] font-heading text-[clamp(2.5rem,6vw,4.75rem)] leading-none font-medium tracking-[-0.03em] text-rust"
+        className="mx-auto max-w-[14ch] font-heading text-[clamp(2.5rem,6vw,4.75rem)] leading-none font-medium tracking-[-0.03em] text-primary"
         variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06 } } }}
       >
         <span className="sr-only">{title}</span>

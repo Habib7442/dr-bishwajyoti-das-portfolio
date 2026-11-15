@@ -27,11 +27,19 @@ export function RevealHeader({ className, children }: { className?: string; chil
   );
 }
 
-export function AccentWord({ children }: { children: React.ReactNode }) {
+/**
+ * Highlighted heading word. `onDark` (navy band): navy word on a full-height accent-light bar,
+ * since a navy word over the navy band would be unreadable outside a 40% bar.
+ */
+export function AccentWord({ children, onDark = false }: { children: React.ReactNode; onDark?: boolean }) {
   return (
-    <span className="relative z-0 inline-block">
+    <span className={cn("relative z-0 inline-block", onDark && "px-[0.08em] text-primary")}>
       {children}
-      <Highlighter trigger="parent" delay={0.5} />
+      <Highlighter
+        trigger="parent"
+        delay={0.5}
+        className={onDark ? "inset-x-0 top-[0.06em] bottom-[0.02em] h-auto bg-accent-light" : undefined}
+      />
     </span>
   );
 }
@@ -98,7 +106,7 @@ export function ReviewQuote({ text, className }: { text: string; className?: str
           aria-expanded={open}
           aria-controls={id}
           onClick={() => setOpen((o) => !o)}
-          className="mt-2 text-[13px] font-medium text-rust underline-offset-4 hover:underline"
+          className="mt-2 text-[13px] font-medium text-primary underline-offset-4 hover:underline"
         >
           {open ? "Show less" : "Read more"}
         </button>
@@ -193,11 +201,11 @@ export function ReviewsTrack({ className, children }: { className?: string; chil
   );
 }
 
-/** Prev = rust outline circle, next = filled rust circle; disabled at each end; hidden (space kept) when all cards fit */
+/** On the navy band: prev = white outline circle, next = filled accent circle; disabled at each end; hidden (space kept) when all cards fit */
 export function ReviewsArrows({ className }: { className?: string }) {
   const { canPrev, canNext, overflows, scrollByCard } = useTrack();
   const base =
-    "grid size-11 cursor-pointer place-items-center rounded-full transition duration-200 ease-out disabled:cursor-not-allowed disabled:opacity-40 [&_svg]:size-5";
+    "grid size-11 cursor-pointer place-items-center rounded-full transition duration-200 ease-out focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-40 [&_svg]:size-5";
   return (
     <div className={cn("gap-3", !overflows && "invisible", className)} aria-hidden={!overflows || undefined}>
       <button
@@ -206,7 +214,7 @@ export function ReviewsArrows({ className }: { className?: string }) {
         aria-controls={TRACK_ID}
         disabled={!canPrev}
         onClick={() => scrollByCard(-1)}
-        className={cn(base, "border border-rust/40 text-rust enabled:hover:bg-rust/5")}
+        className={cn(base, "border border-white/50 text-white enabled:hover:bg-white/10")}
       >
         <ArrowLeft strokeWidth={1.5} aria-hidden />
       </button>
@@ -216,7 +224,7 @@ export function ReviewsArrows({ className }: { className?: string }) {
         aria-controls={TRACK_ID}
         disabled={!canNext}
         onClick={() => scrollByCard(1)}
-        className={cn(base, "bg-rust text-white enabled:hover:bg-rust-dark")}
+        className={cn(base, "bg-accent text-primary enabled:hover:bg-accent-dark")}
       >
         <ArrowRight strokeWidth={1.5} aria-hidden />
       </button>

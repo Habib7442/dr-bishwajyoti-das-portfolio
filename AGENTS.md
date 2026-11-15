@@ -39,9 +39,17 @@ Main user flow: land on the hero → scan the services → read about the doctor
 11. Footer
 12. Floating WhatsApp button (mobile only)
 13. SEO: metadata, JSON-LD, `sitemap.ts`, `robots.ts`, `opengraph-image.tsx`
-14. `/privacy`: a simple privacy policy page (navbar, text column, footer), the only page besides `/`
+14. `/privacy`: a simple privacy policy page (navbar, text column, footer)
+15. Standalone pages that reuse the home sections (see `prompts/extra-pages.md`, `prompts/route-loading.md`):
+    - `/book`: booking form + chamber
+    - `/services`: all services as cards
+    - `/about`: the About section with its statement as the `h1`
+    - `/chamber`: the Chamber section (`h1`) + CTA
+    - `/faq`: the FAQ section (`h1`) + CTA; FAQPage JSON-LD stays on `/` only
+    - `/reviews`: real reviews only; a 404 (and no nav/footer/sitemap entry) while `reviewsState()` is "hidden"
+16. Route loading states: `RouteProgress` top bar, `loading.tsx` per route (`PageLoader`, skeletons for `/services` and `/reviews`), `app/template.tsx` fade-up
 
-Do not overbuild. No blog, no CMS, no admin panel, no login, no database, no contact-form backend, no extra pages (beyond `/privacy`), no dark mode, no i18n, no analytics unless asked.
+Do not overbuild. No blog, no CMS, no admin panel, no login, no database, no contact-form backend, no extra pages (beyond `/privacy`, `/book`, `/services`, `/about`, `/chamber`, `/faq`, `/reviews`), no dark mode, no i18n, no analytics unless asked.
 
 ---
 
@@ -190,9 +198,10 @@ For UI tasks, also include:
 
 ## 8. Decisions already made
 
-- One page with smooth-scroll anchors:
-  - `#home`, `#services`, `#about`, `#reviews`, `#contact`
-  - `#contact` is the Chamber section
+- Every navbar and footer link is its own page (`/`, `/services`, `/about`, `/chamber`, `/faq`, `/reviews`, `/book`); the home page still shows all sections.
+  - Navbar, Footer and FloatingWhatsApp are rendered once in `app/layout.tsx`, not by pages.
+  - Internal links use `next/link` (or `SectionLink` for `/page#section`; the hash is scrolled to and never left in the URL).
+  - `<html data-scroll-behavior="smooth">` is required: without it, Next 16's route-change scroll animates and lands on the footer.
 - Section band order (do not reorder):
 
   | # | Section | Band color |
@@ -224,8 +233,9 @@ For UI tasks, also include:
 ## 9. File structure
 
 ```
-app/            layout.tsx (fonts, metadata, JSON-LD) · page.tsx (assembles sections) · globals.css
-                sitemap.ts · robots.ts · opengraph-image.tsx
+app/            layout.tsx (fonts, metadata, site-wide JSON-LD) · page.tsx (assembles sections, FAQPage JSON-LD) · globals.css
+                book/ · services/ · about/ · privacy/ (page.tsx each)
+                sitemap.ts · robots.ts · opengraph-image.jpg
 components/
   sections/     Hero, Intro, Services, About, Chamber, WhoWeHelp, Reviews, Faq, Cta, Footer, Navbar
   ui/           shadcn primitives + Pill, RotatingBadge, IconButton

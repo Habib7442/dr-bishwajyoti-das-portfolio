@@ -14,12 +14,12 @@ import { AccentWord, BookScrollPill, FadeUp, PillPop, StatementLine, StatsRow } 
 const publicFileExists = (src: string) => src.startsWith("/") && existsSync(join(process.cwd(), "public", src));
 
 const pillClass =
-  "ml-3 inline-flex h-[0.8em] w-[1.6em] translate-y-[0.05em] items-center justify-center overflow-hidden rounded-full align-middle ring-2 ring-lime";
+  "ml-3 inline-flex h-[0.8em] w-[1.6em] translate-y-[0.05em] items-center justify-center overflow-hidden rounded-full align-middle ring-2 ring-accent";
 
 function ImagePill({ src, index }: { src: string; index: number }) {
   const hasPhoto = publicFileExists(src);
   return (
-    <PillPop index={index} className={cn(pillClass, "relative", !hasPhoto && "bg-peach text-rust")}>
+    <PillPop index={index} className={cn(pillClass, "relative", !hasPhoto && "bg-tint-1 text-primary")}>
       {hasPhoto ? (
         <Image src={src} alt="" fill sizes="120px" className="object-cover object-center" />
       ) : (
@@ -52,7 +52,7 @@ export function Intro() {
   const bookLabel = whatsappNumber ? "Book on WhatsApp" : "Book Online";
 
   return (
-    <section id="about-intro" aria-labelledby="intro-title" className="relative overflow-hidden bg-rust pt-28 pb-24 text-white md:pt-36 md:pb-28">
+    <section id="about-intro" aria-labelledby="intro-title" className="relative overflow-hidden bg-primary pt-28 pb-24 text-white md:pt-36 md:pb-28">
       {/* half off the right edge; centred on lines 3–4 ("and every / allergy"):
           section pt (9rem at md+) + 3 line-heights (1.05 × the h2 font size) */}
       <div
@@ -88,17 +88,17 @@ export function Intro() {
                     <a
                       href={telHref}
                       aria-label={`Call ${site.name}`}
-                      className="font-heading text-[22px] font-medium whitespace-nowrap text-lime underline decoration-lime/60 underline-offset-4 transition-colors hover:decoration-lime focus-visible:outline-lime"
+                      className="font-heading text-[22px] font-medium whitespace-nowrap text-accent underline decoration-accent/60 underline-offset-4 transition-colors hover:decoration-accent focus-visible:outline-accent"
                     >
                       {site.phone}
                     </a>
                   )}
                   {whatsappNumber ? (
-                    <BookScrollPill className="inline-flex h-11 items-center whitespace-nowrap justify-center rounded-full bg-lime px-6 text-[13px] font-medium text-rust transition duration-200 ease-out hover:-translate-y-px hover:bg-lime-dark focus-visible:outline-lime motion-reduce:hover:translate-y-0">
+                    <BookScrollPill className="inline-flex h-11 items-center whitespace-nowrap justify-center rounded-full bg-accent px-6 text-[13px] font-medium text-primary transition duration-200 ease-out hover:-translate-y-px hover:bg-accent-dark focus-visible:outline-accent motion-reduce:hover:translate-y-0">
                       {bookLabel}
                     </BookScrollPill>
                   ) : (
-                    <Pill href={site.onlineBooking} variant="lime">
+                    <Pill href={site.onlineBooking} variant="accent">
                       {bookLabel}
                     </Pill>
                   )}

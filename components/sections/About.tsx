@@ -10,7 +10,7 @@ import { BookScrollPill } from "./IntroMotion";
 import { ArchReveal, RevealGroup, RevealItem, StatementHeading } from "./AboutMotion";
 
 const approachIcons: Record<ApproachIcon, LucideIcon> = { Ear, MessagesSquare, HandHeart };
-const cardColors = ["bg-cream", "bg-butter", "bg-peach"];
+const cardColors = ["bg-base", "bg-tint-3", "bg-tint-1"];
 
 /** Local /public file present at build time? (monogram fallback otherwise) */
 const publicFileExists = (src: string) => src.startsWith("/") && existsSync(join(process.cwd(), "public", src));
@@ -27,7 +27,7 @@ function ArchPhoto() {
   return (
     <ArchReveal
       className="relative mx-auto aspect-[4/5] w-full max-w-[300px] lg:max-w-[440px]"
-      archClassName={cn("absolute inset-0 overflow-hidden bg-cream", archShape)}
+      archClassName={cn("absolute inset-0 overflow-hidden bg-base", archShape)}
     >
       {hasPhoto ? (
         <Image
@@ -41,7 +41,7 @@ function ArchPhoto() {
         <span
           role="img"
           aria-label={about.portraitAlt}
-          className="absolute inset-0 grid place-items-center font-heading text-[120px] font-semibold tracking-[-0.04em] text-rust"
+          className="absolute inset-0 grid place-items-center font-heading text-[120px] font-semibold tracking-[-0.04em] text-primary"
         >
           <span aria-hidden>BD</span>
         </span>
@@ -50,9 +50,10 @@ function ArchPhoto() {
   );
 }
 
-function Text() {
+function Text({ headingAs }: { headingAs: "h1" | "h2" }) {
   const hasQual = !isTodo(about.qualifications);
   const bio = about.bio.filter((p) => !isTodo(p));
+  const NameTag = headingAs === "h1" ? "h2" : "h3";
   return (
     <div>
       <p className="flex items-center gap-3 text-xs font-medium tracking-[0.08em] text-ink/70 uppercase">
@@ -61,14 +62,15 @@ function Text() {
       </p>
       <StatementHeading
         id="about-title"
+        as={headingAs}
         lead={about.statement.lead}
         accent={about.statement.accent}
         className="mt-4 font-heading text-[clamp(2.5rem,5vw,4.25rem)] leading-none font-medium tracking-[-0.03em] text-ink"
       />
 
       <RevealGroup stagger={0.1}>
-        <RevealItem className="mt-12 border-l-2 border-rust pl-4">
-          <h3 className="font-heading text-[28px] leading-[1.15] font-semibold tracking-[-0.02em] text-rust">{about.name}</h3>
+        <RevealItem className="mt-12 border-l-2 border-primary pl-4">
+          <NameTag className="font-heading text-[28px] leading-[1.15] font-semibold tracking-[-0.02em] text-primary">{about.name}</NameTag>
           <p className="mt-1 text-sm text-ink/80">{about.role}</p>
           {hasQual && <p className="mt-1 text-[13px] text-ink/70">{about.qualifications}</p>}
         </RevealItem>
@@ -82,7 +84,7 @@ function Text() {
         )}
 
         <RevealItem className="mt-8 flex flex-wrap gap-3">
-          <BookScrollPill className="inline-flex h-11 items-center justify-center rounded-full bg-rust px-6 text-[13px] font-medium text-white transition duration-200 ease-out hover:-translate-y-px hover:bg-rust-dark motion-reduce:hover:translate-y-0">
+          <BookScrollPill className="inline-flex h-11 items-center justify-center rounded-full bg-primary px-6 text-[13px] font-medium text-white transition duration-200 ease-out hover:-translate-y-px hover:bg-primary-dark motion-reduce:hover:translate-y-0">
             Book an appointment
           </BookScrollPill>
           {telHref && (
@@ -99,7 +101,8 @@ function Text() {
   );
 }
 
-function ApproachCards() {
+function ApproachCards({ titleAs }: { titleAs: "h3" | "h4" }) {
+  const Title = titleAs;
   return (
     <RevealGroup
       stagger={0.1}
@@ -123,15 +126,15 @@ function ApproachCards() {
             )}
           >
             <div className="flex items-start justify-between">
-              <span aria-hidden className="font-heading text-[64px] leading-none font-semibold tracking-[-0.04em] text-rust/25">
+              <span aria-hidden className="font-heading text-[64px] leading-none font-semibold tracking-[-0.04em] text-primary/25">
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <span aria-hidden className="grid size-12 place-items-center rounded-full bg-rust text-white">
+              <span aria-hidden className="grid size-12 place-items-center rounded-full bg-primary text-white">
                 <Icon className="size-[22px]" strokeWidth={1.5} />
               </span>
             </div>
             <div className="mt-8">
-              <h4 className="font-heading text-[26px] leading-[1.15] font-medium tracking-[-0.01em] text-rust">{a.title}</h4>
+              <Title className="font-heading text-[26px] leading-[1.15] font-medium tracking-[-0.01em] text-primary">{a.title}</Title>
               <p className="mt-2 text-sm leading-[1.6] text-ink/80">{a.text}</p>
             </div>
           </RevealItem>
@@ -150,7 +153,7 @@ function InfoBar() {
     <RevealGroup
       as="dl"
       fade
-      className="grid grid-cols-2 gap-y-4 rounded-[28px] bg-white px-6 py-6 md:flex md:gap-y-0 md:divide-x md:divide-rust/15 md:px-10"
+      className="grid grid-cols-2 gap-y-4 rounded-[28px] bg-white px-6 py-6 md:flex md:gap-y-0 md:divide-x md:divide-primary/15 md:px-10"
     >
       {items.map((it, i) => (
         <div
@@ -158,33 +161,34 @@ function InfoBar() {
           className={cn(
             "md:flex-1 md:px-6 md:first:pl-0 md:last:pr-0",
             i % 2 === 0 ? "pr-4" : "pl-4",
-            i >= 2 && "border-t border-rust/10 pt-4 md:border-t-0 md:pt-0",
+            i >= 2 && "border-t border-primary/10 pt-4 md:border-t-0 md:pt-0",
             odd && i === items.length - 1 && "col-span-2 pl-0",
           )}
         >
           <dt className="text-[11px] tracking-[0.08em] text-ink/60 uppercase">{it.label}</dt>
-          <dd className="mt-1 font-heading text-lg leading-[1.25] font-medium text-rust">{it.value}</dd>
+          <dd className="mt-1 font-heading text-lg leading-[1.25] font-medium text-primary">{it.value}</dd>
         </div>
       ))}
     </RevealGroup>
   );
 }
 
-export function About() {
+/** `headingAs="h1"` on /about, where the statement is the page title */
+export function About({ headingAs = "h2" }: { headingAs?: "h1" | "h2" }) {
   return (
-    <section id="about" aria-labelledby="about-title" className="relative overflow-hidden bg-lavender pt-36 pb-12">
+    <section id="about" aria-labelledby="about-title" className="relative overflow-hidden bg-section pt-36 pb-12">
       <div className="mx-auto max-w-[1200px] px-6 lg:px-16">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
             <ArchPhoto />
           </div>
           <div className="lg:col-span-6 lg:col-start-7">
-            <Text />
+            <Text headingAs={headingAs} />
           </div>
         </div>
 
         <div className="mt-24">
-          <ApproachCards />
+          <ApproachCards titleAs={headingAs === "h1" ? "h3" : "h4"} />
         </div>
 
         <div className="mt-6">
@@ -192,12 +196,12 @@ export function About() {
         </div>
       </div>
 
-      {/* lime ribbon closing the section; wider than the viewport, clipped by the section */}
+      {/* accent ribbon closing the section; wider than the viewport, clipped by the section */}
       <div className="relative mt-24 -mx-[5vw]">
         <Marquee
           items={about.marquee}
-          className="-rotate-2 bg-lime py-4 font-heading text-[clamp(1.75rem,4vw,3rem)] leading-none font-semibold tracking-[-0.02em] text-rust md:py-6"
-          glyphClassName="text-rust/40"
+          className="-rotate-2 bg-accent py-4 font-heading text-[clamp(1.75rem,4vw,3rem)] leading-none font-semibold tracking-[-0.02em] text-primary md:py-6"
+          glyphClassName="text-primary/40"
         />
       </div>
     </section>

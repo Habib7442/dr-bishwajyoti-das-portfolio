@@ -16,11 +16,11 @@ import {
 } from "@/lib/booking";
 import { isTodo, telHref, whatsappUrl } from "@/lib/site-helpers";
 import { cn } from "@/lib/utils";
-import { PREFILL_EVENT, type PrefillDetail } from "@/lib/scroll-to-booking";
+import { PREFILL_EVENT, PROBLEM_PARAM, type PrefillDetail } from "@/lib/scroll-to-booking";
 
 const inputBase =
-  "h-11 w-full rounded-2xl border border-rust/15 bg-white/85 px-4 text-base text-ink placeholder:text-ink/45 transition-colors focus-visible:border-rust focus-visible:ring-2 focus-visible:ring-lime focus-visible:outline-none aria-invalid:border-rust";
-const labelBase = "mb-1.5 block text-xs font-medium text-rust";
+  "h-11 w-full rounded-2xl border border-primary/15 bg-white/85 px-4 text-base text-ink placeholder:text-ink/45 transition-colors focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none aria-invalid:border-primary";
+const labelBase = "mb-1.5 block text-xs font-medium text-primary";
 
 const noopSubscribe = () => () => {};
 
@@ -68,6 +68,12 @@ export function BookingCard() {
       setTouched((t) => ({ ...t, problem: true }));
     };
     window.addEventListener(PREFILL_EVENT, onPrefill);
+
+    // /book?problem=Nose (from a /services card): same pre-select, read on the client so the page stays static
+    const fromUrl = new URLSearchParams(window.location.search).get(PROBLEM_PARAM);
+    const match = booking.problems.find((p) => p === fromUrl);
+    if (match) window.dispatchEvent(new CustomEvent<PrefillDetail>(PREFILL_EVENT, { detail: { problem: match } }));
+
     return () => window.removeEventListener(PREFILL_EVENT, onPrefill);
   }, []);
 
@@ -132,7 +138,7 @@ export function BookingCard() {
 
   // plain render helper (not a component) so the live region keeps its DOM node between renders
   const errorText = (k: keyof BookingForm) => (
-    <p id={errorId(k)} className="mt-1.5 min-h-0 text-xs text-rust empty:hidden" aria-live="polite">
+    <p id={errorId(k)} className="mt-1.5 min-h-0 text-xs text-primary empty:hidden" aria-live="polite">
       {show(k) ?? ""}
     </p>
   );
@@ -150,23 +156,23 @@ export function BookingCard() {
     <div className="w-full max-w-[440px] rounded-[28px] border border-white/80 bg-white/60 p-5 backdrop-blur-xl md:p-6 lg:p-7">
       {done ? (
         <div className="flex min-h-[380px] flex-col items-center justify-center text-center">
-          <span className="grid size-16 place-items-center rounded-full bg-lime text-rust">
+          <span className="grid size-16 place-items-center rounded-full bg-accent text-primary">
             <Check className="size-7" strokeWidth={2} aria-hidden />
           </span>
-          <h2 ref={successRef} tabIndex={-1} className="mt-6 font-heading text-[28px] leading-tight font-medium tracking-[-0.02em] text-rust outline-none">
+          <h2 ref={successRef} tabIndex={-1} className="mt-6 font-heading text-[28px] leading-tight font-medium tracking-[-0.02em] text-primary outline-none">
             Almost done!
           </h2>
           <p className="mt-2 max-w-[28ch] text-sm text-ink/80">Send the message on WhatsApp to confirm.</p>
-          <button type="button" onClick={reset} className="mt-6 min-h-11 px-2 text-sm font-medium text-rust underline decoration-rust/40 underline-offset-4 hover:decoration-rust">
+          <button type="button" onClick={reset} className="mt-6 min-h-11 px-2 text-sm font-medium text-primary underline decoration-primary/40 underline-offset-4 hover:decoration-primary">
             Book another
           </button>
         </div>
       ) : (
         <>
-          <span className="inline-flex h-7 items-center rounded-full bg-lime px-3 text-[11px] font-medium tracking-[0.04em] text-rust uppercase">
+          <span className="inline-flex h-7 items-center rounded-full bg-accent px-3 text-[11px] font-medium tracking-[0.04em] text-primary uppercase">
             Book Appointment
           </span>
-          <h2 className="mt-3 font-heading text-2xl leading-tight font-medium tracking-[-0.02em] text-rust">Get an appointment</h2>
+          <h2 className="mt-3 font-heading text-2xl leading-tight font-medium tracking-[-0.02em] text-primary">Get an appointment</h2>
 
           <form noValidate onSubmit={onSubmit} className="mt-4 flex flex-col gap-3.5">
             <div className="grid gap-3.5 lg:grid-cols-2">
@@ -245,8 +251,8 @@ export function BookingCard() {
                       className={cn(
                         // phones: 32px chips, px-2 so all 5 fit on one line at 375 (px-3 needed 313px of 285px);
                         // the ::after hit area adds 8px above and below for a 48px touch target
-                        "relative h-8 rounded-full px-2 text-[12px] font-medium transition-colors after:absolute after:inset-x-0 after:-inset-y-2 md:h-11 md:px-3.5 md:text-[13px] md:after:hidden focus-visible:ring-2 focus-visible:ring-lime focus-visible:outline-rust",
-                        checked ? "bg-rust text-white" : "border border-rust/20 bg-white/85 text-rust hover:border-rust/50",
+                        "relative h-8 rounded-full px-2 text-[12px] font-medium transition-colors after:absolute after:inset-x-0 after:-inset-y-2 md:h-11 md:px-3.5 md:text-[13px] md:after:hidden focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-primary",
+                        checked ? "bg-primary text-white" : "border border-primary/20 bg-white/85 text-primary hover:border-primary/50",
                       )}
                     >
                       {p}
@@ -295,7 +301,7 @@ export function BookingCard() {
                       </option>
                     ))}
                   </select>
-                  <ChevronDown aria-hidden className="pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2 text-rust" strokeWidth={1.5} />
+                  <ChevronDown aria-hidden className="pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2 text-primary" strokeWidth={1.5} />
                 </div>
                 {errorText("slot")}
               </div>
@@ -331,7 +337,7 @@ export function BookingCard() {
                   requestAnimationFrame(() => document.getElementById(fieldId("note"))?.focus());
                 }}
                 aria-expanded={false}
-                className="-my-1 inline-flex min-h-8 items-center self-start text-[13px] font-medium text-rust underline-offset-4 hover:underline"
+                className="-my-1 inline-flex min-h-8 items-center self-start text-[13px] font-medium text-primary underline-offset-4 hover:underline"
               >
                 + Add a note
               </button>
@@ -341,7 +347,7 @@ export function BookingCard() {
               <button
                 type="submit"
                 disabled={!waReady}
-                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-rust text-sm font-medium text-white transition duration-200 ease-out hover:-translate-y-px hover:bg-rust-dark focus-visible:ring-2 focus-visible:ring-lime focus-visible:outline-rust disabled:cursor-not-allowed disabled:bg-rust/40 disabled:text-white/90 disabled:hover:translate-y-0 disabled:hover:bg-rust/40 motion-reduce:hover:translate-y-0"
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary text-sm font-medium text-white transition duration-200 ease-out hover:-translate-y-px hover:bg-primary-dark focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-primary disabled:cursor-not-allowed disabled:bg-primary/40 disabled:text-white/90 disabled:hover:translate-y-0 disabled:hover:bg-primary/40 motion-reduce:hover:translate-y-0"
               >
                 <MessageCircle className="size-4" strokeWidth={1.5} aria-hidden />
                 Book on WhatsApp
@@ -357,14 +363,14 @@ export function BookingCard() {
           <p className="mt-3 text-center text-xs text-ink/70">
             Prefer to call?{" "}
             {telHref ? (
-              <a href={telHref} className="font-semibold text-rust underline-offset-4 hover:underline">
+              <a href={telHref} className="font-semibold text-primary underline-offset-4 hover:underline">
                 {site.phone}
               </a>
             ) : (
-              <strong className={cn("font-semibold text-rust", isTodo(site.phone) && "todo")}>{site.phone}</strong>
+              <strong className={cn("font-semibold text-primary", isTodo(site.phone) && "todo")}>{site.phone}</strong>
             )}{" "}
             · or{" "}
-            <a href={site.onlineBooking} target="_blank" rel="noopener noreferrer" className="font-medium text-rust underline underline-offset-4">
+            <a href={site.onlineBooking} target="_blank" rel="noopener noreferrer" className="font-medium text-primary underline underline-offset-4">
               book online
             </a>
           </p>

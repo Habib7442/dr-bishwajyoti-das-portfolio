@@ -3,24 +3,26 @@
 @import "shadcn/tailwind.css";
 
 @theme inline {
-  /* brand palette */
-  --color-rust: #8b3a16;
-  --color-rust-dark: #6e2c10;
-  --color-cream: #fbf3dc;
-  --color-lime: #e3ea55;
-  --color-lime-dark: #cdd43c;
-  --color-sky: #c9d6ff;
-  --color-lavender: #a9a0f0;
-  --color-lilac: #e8ccf6;
-  --color-peach: #f4a97c;
-  --color-butter: #f6d77b;
-  --color-ink: #2a1408;
+  /* brand palette ("Trust navy + sky") */
+  --color-primary: #13315c;
+  --color-primary-dark: #0d2340;
+  --color-accent: #4cb8e8;
+  --color-accent-light: #9ed8f5;
+  --color-accent-dark: #2a9bd0;
+  --color-base: #f5f8fc;
+  --color-section: #dce8f7;
+  --color-soft: #eaf1fa;
+  --color-tint-1: #e6f4fb;
+  --color-tint-2: #fff4e0;
+  --color-tint-3: #ede9fe;
+  --color-ink: #0d1b2e;
 
   --font-sans: var(--font-inter);
   --font-heading: var(--font-bricolage);
   --font-serif: var(--font-instrument);
 
-  /* shadcn tokens mapped onto the palette */
+  /* shadcn tokens mapped onto the palette
+     (primary / accent are the brand tokens above, so they are not re-mapped here) */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-ring: var(--ring);
@@ -28,13 +30,11 @@
   --color-border: var(--border);
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
@@ -49,33 +49,63 @@
 
   --animate-spin-slow: spin 20s linear infinite;
   --animate-marquee: marquee 30s linear infinite;
+  /* page loader: sound-wave arcs pulse outward (stagger with animation-delay) */
+  --animate-wave: wave 1.2s ease-out infinite;
+  /* loaders/skeletons stay invisible for 250ms so fast page loads never flash them */
+  --animate-loader-in: loader-in 300ms ease-out 250ms both;
 
   @keyframes marquee {
     to {
       transform: translateX(-50%);
     }
   }
+  @keyframes wave {
+    0% {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.1);
+    }
+  }
+  @keyframes loader-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes skeleton-sweep {
+    to {
+      transform: translateX(100%);
+    }
+  }
 }
 
 :root {
-  --background: #fbf3dc;
-  --foreground: #2a1408;
+  --background: #f5f8fc;
+  --foreground: #0d1b2e;
   --card: #ffffff;
-  --card-foreground: #2a1408;
-  --popover: #8b3a16;
+  --card-foreground: #0d1b2e;
+  --popover: #13315c;
   --popover-foreground: #ffffff;
-  --primary: #8b3a16;
+  --primary: #13315c;
   --primary-foreground: #ffffff;
-  --secondary: #e3ea55;
-  --secondary-foreground: #8b3a16;
+  --secondary: #4cb8e8;
+  --secondary-foreground: #13315c;
   --muted: #f3e6c2;
   --muted-foreground: #5c3a24;
-  --accent: #e3ea55;
-  --accent-foreground: #8b3a16;
+  --accent: #4cb8e8;
+  --accent-foreground: #13315c;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: rgb(139 58 22 / 0.3);
-  --input: rgb(139 58 22 / 0.3);
-  --ring: #8b3a16;
+  --border: rgb(19 49 92 / 0.3);
+  --input: rgb(19 49 92 / 0.3);
+  --ring: #13315c;
   --radius: 1rem;
 }
 
@@ -88,11 +118,11 @@
     scroll-padding-top: 6rem; /* fixed navbar offset for #anchors (96px) */
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-base text-ink;
   }
   /* default focus ring; components may override with ring utilities */
   :focus-visible {
-    outline: 2px solid var(--color-rust);
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
   @media (prefers-reduced-motion: reduce) {
@@ -122,16 +152,38 @@
   font-weight: 600;
 }
 
+/* skeleton block: a soft light band sweeps left → right (static with reduced motion).
+   Not named "shimmer": shadcn/tailwind.css already has a text-shimmer utility by that name (background-clip: text),
+   which would clip the block's background away. */
+@utility skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.55), transparent);
+    animation: skeleton-sweep 1.4s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &::after {
+      animation: none;
+      display: none;
+    }
+  }
+}
+
 /* placeholder values from data/site.ts that still start with TODO */
 @utility todo {
   outline: 2px dashed currentColor;
   outline-offset: 2px;
   border-radius: 4px;
   padding-inline: 0.25em;
-  background: repeating-linear-gradient(-45deg, transparent 0 6px, rgb(227 234 85 / 0.35) 6px 12px);
+  background: repeating-linear-gradient(-45deg, transparent 0 6px, rgb(76 184 232 / 0.35) 6px 12px);
 }
 
-/* ── Custom scrollbar: rust pill thumb on a cream track ── */
+/* ── Custom scrollbar: navy pill thumb on a base track ── */
 @layer base {
   /* Chromium / Safari */
   ::-webkit-scrollbar {
@@ -139,21 +191,21 @@
     height: 12px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--color-cream);
+    background: var(--color-base);
   }
   ::-webkit-scrollbar-thumb {
-    background-color: rgb(139 58 22 / 0.55);
-    border: 3px solid var(--color-cream);
+    background-color: rgb(19 49 92 / 0.55);
+    border: 3px solid var(--color-base);
     border-radius: 999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background-color: var(--color-rust);
+    background-color: var(--color-primary);
   }
   ::-webkit-scrollbar-thumb:active {
-    background-color: var(--color-rust-dark);
+    background-color: var(--color-primary-dark);
   }
   ::-webkit-scrollbar-corner {
-    background: var(--color-cream);
+    background: var(--color-base);
   }
   /* inside white cards/inputs (e.g. textarea) keep the track matching the field */
   textarea::-webkit-scrollbar-track,
@@ -169,12 +221,12 @@
   @supports not selector(::-webkit-scrollbar) {
     html {
       scrollbar-width: thin;
-      scrollbar-color: rgb(139 58 22 / 0.55) var(--color-cream);
+      scrollbar-color: rgb(19 49 92 / 0.55) var(--color-base);
     }
   }
 
   ::selection {
-    background: var(--color-lime);
-    color: var(--color-rust);
+    background: var(--color-accent);
+    color: var(--color-primary);
   }
 }

@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { animate, motion, useReducedMotion } from "motion/react";
 import { ease } from "@/lib/motion";
-import { bookNow } from "@/lib/scroll-to-booking";
+import { bookNow, bookingPageHref } from "@/lib/scroll-to-booking";
+import { cancelRouteProgress } from "@/components/ui/route-progress";
 import { cn } from "@/lib/utils";
 import { useReveal } from "@/lib/use-reveal";
 
@@ -28,7 +30,7 @@ export function StatementLine({ index, className, children }: { index: number; c
 }
 
 /**
- * Accent word: white → lime (0.4s CSS transition) after its line (index) lands.
+ * Accent word: white → accent (0.4s CSS transition) after its line (index) lands.
  * Plain class toggle, not a motion colour tween: motion writes inline styles React can't clean up,
  * which left the word white when reduced motion flipped after hydration.
  */
@@ -38,7 +40,7 @@ export function AccentWord({ index, children }: { index: number; children: React
   return (
     <span
       ref={ref}
-      className={cn("transition-colors duration-[400ms] motion-reduce:transition-none", inView ? "text-lime" : "text-white")}
+      className={cn("transition-colors duration-[400ms] motion-reduce:transition-none", inView ? "text-accent" : "text-white")}
       style={{ transitionDelay: `${index * LINE_STAGGER + LINE_DURATION}s`, transitionTimingFunction: `cubic-bezier(${ease.join(",")})` }}
     >
       {children}
@@ -81,19 +83,21 @@ export function FadeUp({ delay = 0, className, children }: { delay?: number; cla
   );
 }
 
-/** Lime pill that scrolls to the hero form; plain #home jump without JS */
+/** Pill that scrolls to the booking form on this page (URL unchanged); next/link to /book where there is none */
 export function BookScrollPill({ className, children }: { className?: string; children: React.ReactNode }) {
   return (
-    <a
-      href="#home"
+    <Link
+      href={bookingPageHref()}
       onClick={(e) => {
-        e.preventDefault();
-        bookNow();
+        if (bookNow()) {
+          e.preventDefault();
+          cancelRouteProgress(); // scrolled to the form on this page: no page change
+        }
       }}
       className={className}
     >
       {children}
-    </a>
+    </Link>
   );
 }
 
@@ -156,7 +160,7 @@ function StatItem({ stat, index }: { stat: { value: string; label: string }; ind
       transition={{ duration: 0.6, ease, delay: index * 0.1 }}
     >
       <dt className="text-[13px] text-white/70">{stat.label}</dt>
-      <dd className="font-heading text-[clamp(2.5rem,5vw,3.5rem)] leading-none font-medium tracking-[-0.03em] text-lime">
+      <dd className="font-heading text-[clamp(2.5rem,5vw,3.5rem)] leading-none font-medium tracking-[-0.03em] text-accent">
         <StatValue value={stat.value} />
       </dd>
     </motion.div>

@@ -2,26 +2,21 @@ import { About } from "@/components/sections/About";
 import { Chamber } from "@/components/sections/Chamber";
 import { Cta } from "@/components/sections/Cta";
 import { Faq } from "@/components/sections/Faq";
-import { Footer } from "@/components/sections/Footer";
-import { FloatingWhatsApp } from "@/components/sections/FloatingWhatsApp";
 import { Hero } from "@/components/sections/Hero";
 import { Intro } from "@/components/sections/Intro";
-import { Navbar } from "@/components/sections/Navbar";
 import { Reviews } from "@/components/sections/Reviews";
 import { Services } from "@/components/sections/Services";
 import { WhoWeHelp } from "@/components/sections/WhoWeHelp";
-import { reviewsState } from "@/data/reviews";
-import { nav, site } from "@/data/site";
+import { buildFaqJsonLd, jsonLdString } from "@/lib/seo";
 
-// Sections are added one approved prompt at a time (see prompts/).
+// Navbar, Footer and the floating WhatsApp button live in app/layout.tsx.
 
 export default function Home() {
-  // no real reviews and no review/listing links → no Reviews section, so drop its nav link too
-  const links = reviewsState() === "hidden" ? nav.filter((l) => l.href !== "#reviews") : nav;
-
   return (
     <>
-      <Navbar name={site.name} links={links} />
+      {/* site-wide Physician/Clinic/WebSite JSON-LD is in the layout; FAQPage only here (also shown on /faq,
+          but the same FAQ is marked up once) */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(buildFaqJsonLd()) }} />
       <main>
         <Hero />
         <Intro />
@@ -33,8 +28,6 @@ export default function Home() {
         <Faq />
         <Cta />
       </main>
-      <Footer />
-      <FloatingWhatsApp />
     </>
   );
 }

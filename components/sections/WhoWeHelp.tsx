@@ -17,8 +17,8 @@ const shape: Record<WhoGroup["key"], string> = {
   seniors: "rounded-[22px_22px_120px_22px]",
 };
 const fallbackIcon: Record<WhoGroup["key"], LucideIcon> = { children: Baby, adults: User, seniors: HeartHandshake };
-const panelBg: Record<WhoGroup["bg"], string> = { peach: "bg-peach", butter: "bg-butter", sky: "bg-sky" };
-const tagBg: Record<WhoGroup["bg"], string> = { peach: "bg-peach/30", butter: "bg-butter/40", sky: "bg-sky/50" };
+const panelBg: Record<WhoGroup["bg"], string> = { "tint-1": "bg-tint-1", "tint-2": "bg-tint-2", "tint-3": "bg-tint-3" };
+const tagBg: Record<WhoGroup["bg"], string> = { "tint-1": "bg-tint-1/30", "tint-2": "bg-tint-2/40", "tint-3": "bg-tint-3/50" };
 
 function Card({ g }: { g: WhoGroup }) {
   const hasPhoto = publicFileExists(g.image);
@@ -39,7 +39,7 @@ function Card({ g }: { g: WhoGroup }) {
               className="object-cover transition-[scale] duration-[400ms] ease-out [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-[1.04] motion-reduce:group-hover:scale-100"
             />
           ) : (
-            <span aria-hidden className="grid h-full place-items-center text-rust">
+            <span aria-hidden className="grid h-full place-items-center text-primary">
               <Icon className="size-16" strokeWidth={1.5} />
             </span>
           )}
@@ -47,7 +47,7 @@ function Card({ g }: { g: WhoGroup }) {
       </div>
 
       <div className="mt-6 flex flex-1 flex-col px-3 text-center">
-        <h3 className="font-heading text-[26px] leading-[1.15] font-medium tracking-[-0.01em] text-rust">{g.title}</h3>
+        <h3 className="font-heading text-[26px] leading-[1.15] font-medium tracking-[-0.01em] text-primary">{g.title}</h3>
         <p className="mx-auto mt-2 max-w-[34ch] text-sm leading-[1.6] text-ink/75">{g.text}</p>
         <ul className="mt-4 flex flex-nowrap justify-center gap-2">
           {g.conditions.map((c) => (
@@ -67,7 +67,7 @@ function Card({ g }: { g: WhoGroup }) {
           <BookForLink
             problem={g.problem}
             label={`Book an appointment for ${g.title}: ${g.problem} problem`}
-            className="group/link inline-flex h-11 items-center gap-1.5 text-sm font-medium text-rust"
+            className="group/link inline-flex h-11 items-center gap-1.5 text-sm font-medium text-primary"
           >
             <span className="underline-offset-4 group-hover/link:underline">Book for {g.title}</span>
             <ArrowRight
@@ -84,7 +84,7 @@ function Card({ g }: { g: WhoGroup }) {
 
 export function WhoWeHelp() {
   return (
-    <section id="who-we-help" aria-labelledby="who-title" className="relative bg-lilac py-24 md:py-36">
+    <section id="who-we-help" aria-labelledby="who-title" className="relative bg-soft py-24 md:py-36">
       <div className="mx-auto max-w-[1200px] px-6 text-center lg:px-16">
         <FadeUpBlock>
           <p className="text-xs font-medium tracking-[0.08em] text-ink/60 uppercase">{whoWeHelp.eyebrow}</p>
@@ -93,7 +93,7 @@ export function WhoWeHelp() {
           id="who-title"
           lead={whoWeHelp.titleLead}
           accent={whoWeHelp.titleAccent}
-          className="mt-4 font-heading text-[clamp(2.5rem,5.5vw,4.5rem)] leading-none font-medium tracking-[-0.03em] text-rust"
+          className="mt-4 font-heading text-[clamp(2.5rem,5.5vw,4.5rem)] leading-none font-medium tracking-[-0.03em] text-primary"
         />
         <FadeUpBlock>
           <p className="mx-auto mt-4 max-w-[46ch] text-[15px] leading-[1.65] text-ink/75">{whoWeHelp.intro}</p>

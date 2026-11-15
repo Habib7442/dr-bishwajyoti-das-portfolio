@@ -48,7 +48,7 @@ export const site = {
 
   images: {
     // decorative background illustration (2400×1350 recommended); alt is empty on purpose
-    hero: { src: "/images/hero-ear.webp", alt: "" },
+    hero: { src: "/images/hero-ear-cool.webp", alt: "" },
     chamber: { src: unsplash("1519494026892-80bbd2d6fd0d"), alt: "Hospital reception desk (placeholder for Nightingale Hospital)" },
   },
 };
@@ -67,7 +67,7 @@ export const quickFactsShort: Record<keyof typeof quickFacts, string> = {
   fee: "₹500",
 };
 
-/** Lavender "Meet Your Doctor" band. Anything still starting with TODO is hidden on the page. */
+/** Section "Meet Your Doctor" band. Anything still starting with TODO is hidden on the page. */
 export type AboutInfo = { label: string; value: string };
 export type ApproachIcon = "Ear" | "MessagesSquare" | "HandHeart";
 
@@ -79,7 +79,7 @@ export const about = {
   statement: { lead: "Good treatment starts with", accent: "listening." },
   name: site.name,
   role: site.title,
-  // shown on a cream arch, no filters. A background-removed /images/doctor/portrait.png looks best: change this path when it arrives.
+  // shown on a base arch, no filters. A background-removed /images/doctor/portrait.png looks best: change this path when it arrives.
   portrait: "/images/doctor/portrait.webp",
   portraitAlt: "Dr. Biswajyoti Das, ENT & Allergy Specialist in Silchar",
   qualifications: site.qualifications,
@@ -107,7 +107,7 @@ export const about = {
   marquee: ["Ear", "Nose", "Throat", "Allergy", "Hearing", "Sinus", "Voice"],
 };
 
-/** Rust "Visit the Chamber" band. `schedule` is also the source for the JSON-LD opening hours. */
+/** Primary "Visit the Chamber" band. `schedule` is also the source for the JSON-LD opening hours. */
 export type ChamberDay = {
   day: "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";
   open: string | null; // "HH:MM" 24h, Asia/Kolkata; null = closed
@@ -117,7 +117,7 @@ export type ChamberDay = {
 export const chamber = {
   eyebrow: "Chamber & timings",
   titleLine1: "Visit the",
-  titleLine2: "Chamber", // lime
+  titleLine2: "Chamber", // accent
   intro: "Consultations run every afternoon and evening except Sunday at Nightingale Hospital, Meherpur.",
   hospital: "Nightingale Hospital",
   address: "Meherpur, Silchar, Assam", // TODO (not shown as TODO): full street address + PIN from the doctor
@@ -138,7 +138,7 @@ export const chamber = {
   whatsappMessage: "Hello Doctor, I'd like to book an appointment at Nightingale Hospital, Meherpur.",
 };
 
-/** Lilac "Who We Help" band. `problem` pre-selects the hero form's chip from the card link. */
+/** Soft "Who We Help" band. `problem` pre-selects the hero form's chip from the card link. */
 export type WhoGroup = {
   key: "children" | "adults" | "seniors";
   title: string;
@@ -146,7 +146,7 @@ export type WhoGroup = {
   conditions: string[];
   image: string;
   imageAlt: string;
-  bg: "peach" | "butter" | "sky";
+  bg: "tint-1" | "tint-2" | "tint-3";
   problem: (typeof booking.problems)[number];
 };
 
@@ -163,7 +163,7 @@ export const whoWeHelp = {
       conditions: ["Ear infections", "Tonsils", "Adenoids"],
       image: "/images/who/children.webp",
       imageAlt: "Child smiling during a gentle ear check-up",
-      bg: "peach",
+      bg: "tint-1",
       problem: "Ear",
     },
     {
@@ -173,7 +173,7 @@ export const whoWeHelp = {
       conditions: ["Sinusitis", "Allergies", "Throat & voice"],
       image: "/images/who/adults.webp",
       imageAlt: "Smiling woman breathing easily through her nose",
-      bg: "butter",
+      bg: "tint-2",
       problem: "Nose",
     },
     {
@@ -183,14 +183,14 @@ export const whoWeHelp = {
       conditions: ["Hearing loss", "Vertigo", "Tinnitus"],
       image: "/images/who/seniors.webp",
       imageAlt: "Smiling older man cupping his hand to his ear to listen",
-      bg: "sky",
+      bg: "tint-3",
       problem: "Ear",
     },
   ] as WhoGroup[],
 };
 
 
-/** Rust intro band under the hero. Stats whose value starts with TODO are hidden. */
+/** Primary intro band under the hero. Stats whose value starts with TODO are hidden. */
 export type IntroLine = { text: string; indent: 0 | 1; asterisk?: boolean; accent?: boolean; pill?: string };
 export type IntroStat = { value: string; label: string };
 
@@ -199,7 +199,7 @@ export const intro = {
     { text: "Expert care for your", indent: 0 },
     { text: "ear, nose & throat", indent: 1, asterisk: true },
     { text: "and every", indent: 0 },
-    // lime word + small round image after it; file lives in /public (ear-icon fallback while missing)
+    // accent word + small round image after it; file lives in /public (ear-icon fallback while missing)
     { text: "allergy", indent: 0, accent: true, pill: "/images/intro-pill.webp" },
   ] as IntroLine[],
   paragraph:
@@ -226,15 +226,55 @@ export const booking = {
   noteMax: 200,
 };
 
+/** Every link is its own page. "/reviews" is dropped while there are no reviews (see reviewsState()). */
 export const nav = [
-  { label: "Home", href: "#home" },
-  { label: "Services", href: "#services" },
-  { label: "About", href: "#about" },
-  { label: "Reviews", href: "#reviews" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
+  { label: "About", href: "/about" },
+  { label: "Reviews", href: "/reviews" },
+  { label: "Contact", href: "/chamber" },
 ];
 
-/** Cream "Our Services" accordion. `problem` pre-selects the hero form's chip from "Book for this →". */
+/** Standalone pages next to the one-page home. Copy only restates facts already on the site. */
+export const pages = {
+  book: {
+    title: "Book an Appointment",
+    eyebrow: "Appointments",
+    heading: "Book an appointment",
+    intro: "Choose your problem, a day and a time slot, then send the request on WhatsApp. You can also call or book online.",
+    altHeading: "Prefer another way?",
+    description:
+      "Book an appointment with Dr. Biswajyoti Das, ENT & Allergy Specialist in Silchar, at Nightingale Hospital, Meherpur. Mon–Sat, 2:30–9 PM.",
+  },
+  services: {
+    title: "ENT & Allergy Services",
+    eyebrow: "What we treat",
+    heading: "Our Services",
+    description:
+      "Ear, hearing, sinus, nose, throat, voice and allergy care in Silchar by Dr. Biswajyoti Das, ENT & Allergy Specialist at Nightingale Hospital, Meherpur.",
+  },
+  chamber: {
+    title: "Chamber, Timings & Fee",
+    description:
+      "Visit Dr. Biswajyoti Das, ENT & Allergy Specialist, at Nightingale Hospital, Meherpur, Silchar. Mon–Sat, 2:30–9 PM. Consultation fee ₹500. Map and directions.",
+  },
+  faq: {
+    title: "Frequently Asked Questions",
+    description:
+      "Answers about booking, timings, fees and visiting Dr. Biswajyoti Das, ENT & Allergy Specialist at Nightingale Hospital, Meherpur, Silchar.",
+  },
+  reviews: {
+    title: "Patient Reviews",
+    description: "Reviews from patients of Dr. Biswajyoti Das, ENT & Allergy Specialist in Silchar.",
+  },
+  about: {
+    title: "About the Doctor",
+    description:
+      "Meet Dr. Biswajyoti Das, ENT & Allergy Specialist in Silchar, seeing children, adults and senior citizens at Nightingale Hospital, Meherpur.",
+  },
+};
+
+/** Base "Our Services" accordion. `problem` pre-selects the hero form's chip from "Book for this →". */
 export type ServiceIcon = "Ear" | "Wind" | "Flower2" | "Mic" | "RotateCw" | "BedDouble" | "ScanEye";
 export type Service = {
   slug: string;
@@ -323,6 +363,8 @@ export const services: Service[] = [
 /** Rows shown before "See All" */
 export const servicesVisible = 4;
 
+export const servicesIntro = "Treatment for common and long-standing ear, nose, throat and allergy problems, for all ages.";
+
 
 /** White FAQ band. Answers are built from the data above so facts stay in sync; also the source of the FAQPage JSON-LD. */
 export type FaqItem = { id: string; q: string; a: string };
@@ -381,7 +423,7 @@ export const faq = {
 /** Directions from the visitor's location (Google Maps, new tab) */
 export const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(chamber.mapsQuery)}`;
 
-/** Lime CTA band + footer. Social links still starting with TODO are hidden (the whole "Follow" block if all are). */
+/** Accent CTA band + footer. Social links still starting with TODO are hidden (the whole "Follow" block if all are). */
 export type SocialKey = "facebook" | "instagram" | "youtube" | "google";
 
 export const footer = {

@@ -3,13 +3,13 @@ import { isExternal } from "@/lib/site-helpers";
 
 const variants = {
   /** primary on dark bands */
-  lime: "bg-lime text-rust hover:bg-lime-dark focus-visible:outline-lime",
+  accent: "bg-accent text-primary hover:bg-accent-dark focus-visible:outline-accent",
   /** primary on light bands */
-  rust: "bg-rust text-white hover:bg-rust-dark",
+  primary: "bg-primary text-white hover:bg-primary-dark",
   /** outline on dark bands */
-  "outline-light": "border border-white/60 text-white hover:bg-white/10 focus-visible:outline-lime",
+  "outline-light": "border border-white/60 text-white hover:bg-white/10 focus-visible:outline-accent",
   /** outline on light bands */
-  "outline-dark": "border border-rust text-rust hover:bg-rust/5",
+  "outline-dark": "border border-primary text-primary hover:bg-primary/5",
 };
 
 type PillProps = {
@@ -21,7 +21,7 @@ type PillProps = {
 };
 
 /** Rounded-full pill link (DESIGN.md §6 Buttons) */
-export function Pill({ href, children, variant = "rust", className, ...rest }: PillProps) {
+export function Pill({ href, children, variant = "primary", className, ...rest }: PillProps) {
   return (
     <a
       href={href}

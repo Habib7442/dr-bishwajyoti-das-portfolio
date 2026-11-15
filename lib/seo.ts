@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import type { Metadata, Viewport } from "next";
 import { chamber, faq, site } from "@/data/site";
 import { openingHoursSpec } from "@/lib/chamber-hours";
@@ -61,8 +63,35 @@ export const siteMetadata: Metadata = {
   formatDetection: { telephone: false, address: false, email: false },
 };
 
+// same image + alt the app/opengraph-image.jpg / twitter-image.jpg file convention serves
+const shareAlt = readFileSync(join(process.cwd(), "app", "opengraph-image.alt.txt"), "utf8").trim();
+const shareImage = (src: string) => ({ url: src, width: 1200, height: 630, type: "image/jpeg", alt: shareAlt });
+
+/**
+ * Metadata for a page other than home. A page that sets openGraph/twitter replaces the layout's
+ * objects AND drops the file-convention share image, so both are set again here.
+ */
+export function pageMetadata({ title, description, path }: { title: string; description: string; path: string }): Metadata {
+  const full = `${title} | ${site.name}`;
+  return {
+    title,
+    description,
+    alternates: { canonical: path },
+    openGraph: {
+      type: "website",
+      locale: "en_IN",
+      siteName: site.name,
+      url: path,
+      title: full,
+      description,
+      images: [shareImage("/opengraph-image.jpg")],
+    },
+    twitter: { card: "summary_large_image", title: full, description, images: [shareImage("/twitter-image.jpg")] },
+  };
+}
+
 export const siteViewport: Viewport = {
-  themeColor: "#FBF3DC", // cream, matches the hero
+  themeColor: "#13315C", // primary (navy), same as the manifest theme_color
   colorScheme: "light",
 };
 
@@ -142,14 +171,19 @@ export function buildJsonLd() {
         inLanguage: "en-IN",
         publisher: { "@id": ids.physician },
       },
-      {
-        "@type": "FAQPage",
-        "@id": ids.faq,
-        inLanguage: "en-IN",
-        about: { "@id": ids.physician },
-        mainEntity: faqEntities,
-      },
     ],
+  };
+}
+
+/** FAQPage: only on the home page, the one page that shows the FAQ (markup must match visible content) */
+export function buildFaqJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": ids.faq,
+    inLanguage: "en-IN",
+    about: { "@id": ids.physician },
+    mainEntity: faqEntities,
   };
 }
 

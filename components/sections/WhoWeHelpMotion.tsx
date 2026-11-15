@@ -6,7 +6,7 @@ import { ease } from "@/lib/motion";
 import { useReveal } from "@/lib/use-reveal";
 import { Highlighter } from "@/components/ui/highlighter";
 
-/** h2 fades up; the lime highlighter sweeps under the accent word 0.5s later */
+/** h2 fades up; the accent highlighter sweeps under the accent word 0.5s later */
 export function WhoTitle({ id, lead, accent, className }: { id: string; lead: string; accent: string; className?: string }) {
   const ref = useRef<HTMLHeadingElement>(null);
   const shown = useReveal(ref);

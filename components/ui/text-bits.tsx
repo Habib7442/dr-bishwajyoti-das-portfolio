@@ -4,7 +4,7 @@ import { isTodo } from "@/lib/site-helpers";
 /** Decorative ✳ accent */
 export function Asterisk({ className }: { className?: string }) {
   return (
-    <span aria-hidden className={cn("inline-block text-lime", className)}>
+    <span aria-hidden className={cn("inline-block text-accent", className)}>
       ✳
     </span>
   );

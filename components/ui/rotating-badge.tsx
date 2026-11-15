@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 type Props = { id: string; text?: string; className?: string; variant?: "filled" | "outline" };
 
 /**
- * Lime circular badge with text on a circular path, spinning 20s linear (DESIGN.md §6).
+ * Accent circular badge with text on a circular path, spinning 20s linear (DESIGN.md §6).
  * 80px mobile / 112px desktop by default; override size via className.
  * `outline`: decorative text ring only (no fill, no icon, faint white text), always aria-hidden.
  */
@@ -16,7 +16,7 @@ export function RotatingBadge({ id, text = "ENT • ALLERGY • SILCHAR • ", c
       aria-hidden={outline || undefined}
       className={cn(
         "relative grid size-20 place-items-center rounded-full md:size-28",
-        outline ? "text-white/10" : "bg-lime text-rust",
+        outline ? "text-white/10" : "bg-accent text-primary",
         className,
       )}
     >

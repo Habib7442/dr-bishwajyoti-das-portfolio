@@ -1,10 +1,13 @@
 "use client";
 
-import { bookNow, type PrefillProblem } from "@/lib/scroll-to-booking";
+import Link from "next/link";
+import { bookNow, bookingPageHref, type PrefillProblem } from "@/lib/scroll-to-booking";
+import { cancelRouteProgress } from "@/components/ui/route-progress";
 
 /**
- * "Book for … →" link (Services, Who We Help): scrolls to the hero form, pre-selects the
- * matching problem chip and focuses the name field. A plain #home jump without JS.
+ * "Book for … →" link (Services, Who We Help). On a page with the booking form (home): scrolls to it,
+ * pre-selects the matching problem chip and focuses the name field, URL unchanged.
+ * Elsewhere: next/link to /book?problem=…
  */
 export function BookForLink({
   problem,
@@ -18,16 +21,18 @@ export function BookForLink({
   children: React.ReactNode;
 }) {
   return (
-    <a
-      href="#home"
+    <Link
+      href={bookingPageHref(problem)}
       aria-label={label}
       className={className}
       onClick={(e) => {
-        e.preventDefault();
-        bookNow(problem);
+        if (bookNow(problem)) {
+          e.preventDefault();
+          cancelRouteProgress(); // scrolled to the form on this page: no page change
+        }
       }}
     >
       {children}
-    </a>
+    </Link>
   );
 }

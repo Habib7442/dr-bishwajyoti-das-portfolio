@@ -1,14 +1,14 @@
 import { cn } from "@/lib/utils";
 
-type Token = "cream" | "lavender" | "rust" | "lilac" | "lime";
+type Token = "base" | "section" | "primary" | "soft" | "accent";
 
 // literal class names so Tailwind generates them
 const fill: Record<Token, string> = {
-  cream: "fill-cream",
-  lavender: "fill-lavender",
-  rust: "fill-rust",
-  lilac: "fill-lilac",
-  lime: "fill-lime",
+  base: "fill-base",
+  section: "fill-section",
+  primary: "fill-primary",
+  soft: "fill-soft",
+  accent: "fill-accent",
 };
 
 /**

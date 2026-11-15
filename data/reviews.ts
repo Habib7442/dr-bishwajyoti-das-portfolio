@@ -8,8 +8,6 @@
  * - No Review / AggregateRating JSON-LD: Google doesn't allow self-serving review markup.
  */
 
-import { demoReviews } from "./reviews.demo";
-
 export type Review = {
   name: string; // exactly as shown publicly (e.g. "Rahul D.")
   rating: 1 | 2 | 3 | 4 | 5;
@@ -35,27 +33,13 @@ export const reviewSummary = {
 };
 
 /**
- * Development-only layout preview: with NO real reviews, `npm run dev` and NEXT_PUBLIC_DEMO_REVIEWS=1
- * (in .env.local), the clearly-labelled demo reviews from reviews.demo.ts are shown. `next build`
- * sets NODE_ENV=production, so this branch is removed from production builds.
- */
-export function isDemoReviews() {
-  return reviews.length === 0 && process.env.NODE_ENV === "development" && process.env.NEXT_PUBLIC_DEMO_REVIEWS === "1";
-}
-
-/** Reviews to render: the real ones; demo ones only in the dev preview above */
-export function displayReviews(): Review[] {
-  return isDemoReviews() ? demoReviews : reviews;
-}
-
-/**
  * Which version of the Reviews band to show:
  * - "full": 2+ real reviews → carousel
  * - "fallback": fewer than 2, but a review/listing URL exists → "Your feedback matters"
  * - "hidden": fewer than 2 and no URLs → no section, and no "Reviews" nav link
  */
 export function reviewsState(): "full" | "fallback" | "hidden" {
-  if (displayReviews().length >= 2) return "full";
+  if (reviews.length >= 2) return "full";
   if (reviewSummary.writeReviewUrl || reviewSummary.listingUrl) return "fallback";
   return "hidden";
 }

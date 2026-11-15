@@ -35,14 +35,14 @@ export function ChamberStatus({ schedule, timeZone, className }: { schedule: Sch
       aria-live="polite"
       className={cn(
         "inline-flex h-10 items-center gap-2 rounded-full px-4 text-[13px] font-medium transition-colors",
-        open ? "bg-lime text-rust" : "bg-white/10 text-white",
+        open ? "bg-accent text-primary" : "bg-white/10 text-white",
         className,
       )}
     >
       {open && (
         <span aria-hidden className="relative flex size-2">
-          <span className="absolute inset-0 animate-ping rounded-full bg-rust/60 motion-reduce:animate-none" />
-          <span className="relative size-2 rounded-full bg-rust" />
+          <span className="absolute inset-0 animate-ping rounded-full bg-primary/60 motion-reduce:animate-none" />
+          <span className="relative size-2 rounded-full bg-primary" />
         </span>
       )}
       {status ? label(status) : "Checking today's hours…"}

@@ -1,5 +1,5 @@
 import { Star } from "lucide-react";
-import { displayReviews, isDemoReviews, reviewsState, reviewSummary, type Review } from "@/data/reviews";
+import { reviews, reviewsState, reviewSummary, type Review } from "@/data/reviews";
 import { cn } from "@/lib/utils";
 import { Pill } from "@/components/ui/pill";
 import {
@@ -13,25 +13,23 @@ import {
 } from "./ReviewsMotion";
 
 const tagBg: Record<NonNullable<Review["tag"]>, string> = {
-  Ear: "bg-butter",
-  Nose: "bg-lilac",
-  Throat: "bg-sky",
-  Allergy: "bg-peach",
-  General: "bg-cream",
+  Ear: "bg-tint-2",
+  Nose: "bg-soft",
+  Throat: "bg-tint-3",
+  Allergy: "bg-tint-1",
+  General: "bg-base",
 };
 
 const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
 
-function Stars({ rating, className }: { rating: number; className?: string }) {
+/** Navy stars on white cards; `onDark` = accent stars for the summary line on the navy band */
+function Stars({ rating, onDark = false, className }: { rating: number; onDark?: boolean; className?: string }) {
+  const on = onDark ? "fill-accent text-accent" : "fill-primary text-primary";
+  const off = onDark ? "fill-white/20 text-white/20" : "fill-primary/20 text-primary/20";
   return (
     <span role="img" aria-label={`${rating} out of 5 stars`} className={cn("flex gap-0.5", className)}>
       {[1, 2, 3, 4, 5].map((n) => (
-        <Star
-          key={n}
-          aria-hidden
-          strokeWidth={1.5}
-          className={cn("size-4", n <= Math.round(rating) ? "fill-rust text-rust" : "fill-rust/20 text-rust/20")}
-        />
+        <Star key={n} aria-hidden strokeWidth={1.5} className={cn("size-4", n <= Math.round(rating) ? on : off)} />
       ))}
     </span>
   );
@@ -40,7 +38,7 @@ function Stars({ rating, className }: { rating: number; className?: string }) {
 function ReviewCard({ r, className }: { r: Review; className?: string }) {
   return (
     <CardReveal label={`Review by ${r.name}`} className={cn("relative flex flex-col rounded-[24px] bg-white p-6 md:p-8", className)}>
-      <span aria-hidden className="pointer-events-none absolute top-2 right-6 font-serif text-[96px] leading-none text-rust/15">
+      <span aria-hidden className="pointer-events-none absolute top-2 right-6 font-serif text-[96px] leading-none text-primary/15">
         “
       </span>
       {r.tag && (
@@ -48,10 +46,10 @@ function ReviewCard({ r, className }: { r: Review; className?: string }) {
           {r.tag}
         </span>
       )}
-      {r.headline && <h3 className="mt-4 font-heading text-[19px] leading-[1.25] font-medium text-rust">{r.headline}</h3>}
+      {r.headline && <h3 className="mt-4 font-heading text-[19px] leading-[1.25] font-medium text-primary">{r.headline}</h3>}
       <ReviewQuote text={r.text} className={r.tag || r.headline ? "mt-3" : "mt-0"} />
       <div className="mt-auto pt-6">
-        <div className="flex items-center justify-between gap-4 border-t border-rust/10 pt-4">
+        <div className="flex items-center justify-between gap-4 border-t border-primary/10 pt-4">
           <div>
             <p className="text-[13px] font-medium text-ink">{r.name}</p>
             {r.date && <p className="text-xs text-ink/50">{r.date}</p>}
@@ -64,7 +62,7 @@ function ReviewCard({ r, className }: { r: Review; className?: string }) {
               via {r.source}
             </a>
           ) : (
-            <>via {isDemoReviews() ? "Demo" : r.source}</>
+            <>via {r.source}</>
           )}
         </p>
       </div>
@@ -72,38 +70,41 @@ function ReviewCard({ r, className }: { r: Review; className?: string }) {
   );
 }
 
-/** Full version: 2+ real reviews */
-function ReviewsFull() {
+const titleClass = "font-heading text-[clamp(2.5rem,5.5vw,4.5rem)] leading-none font-medium tracking-[-0.03em] text-white";
+const darkLink = "font-medium text-white underline-offset-4 hover:underline focus-visible:outline-accent";
+
+type HeadingProps = { headingAs: "h1" | "h2" };
+
+/** Full version: 2+ real reviews. Navy band; white cards. */
+function ReviewsFull({ headingAs: Heading }: HeadingProps) {
   const { count, rating, source, listingUrl, writeReviewUrl } = reviewSummary;
+  const pad = Heading === "h1" ? "pt-36 pb-24 md:pb-36" : "py-24 md:py-36";
   return (
-    <section id="reviews" aria-labelledby="reviews-title" className="relative overflow-hidden bg-cream py-24 md:py-36">
+    <section id="reviews" aria-labelledby="reviews-title" className={cn("relative overflow-hidden bg-primary", pad)}>
       <ReviewsCarousel>
         <div className="mx-auto max-w-[1200px] px-6 lg:px-16">
           <div className="flex items-end justify-between gap-6">
             <RevealHeader>
-              <p className="text-xs font-medium tracking-[0.08em] text-ink/60 uppercase">Patient reviews</p>
-              <h2
-                id="reviews-title"
-                className="mt-4 font-heading text-[clamp(2.5rem,5.5vw,4.5rem)] leading-none font-medium tracking-[-0.03em] text-ink"
-              >
+              <p className="text-xs font-medium tracking-[0.08em] text-white/70 uppercase">Patient reviews</p>
+              <Heading id="reviews-title" className={cn("mt-4", titleClass)}>
                 {count ? (
                   <>
-                    <span className="text-rust">{count}+</span> Reviews
+                    <AccentWord onDark>{count}+</AccentWord> Reviews
                   </>
                 ) : (
                   <>
-                    What Patients <AccentWord>Say</AccentWord>
+                    What Patients <AccentWord onDark>Say</AccentWord>
                   </>
                 )}
-              </h2>
+              </Heading>
               {rating !== null && (
-                <p className="mt-4 flex flex-wrap items-center gap-2 text-sm text-ink/75">
-                  <Stars rating={rating} />
+                <p className="mt-4 flex flex-wrap items-center gap-2 text-sm text-white/80">
+                  <Stars rating={rating} onDark />
                   <span>
                     {rating} on {source}
                   </span>
                   {listingUrl && (
-                    <a href={listingUrl} {...ext} className="font-medium text-rust underline-offset-4 hover:underline">
+                    <a href={listingUrl} {...ext} className={darkLink}>
                       See all reviews →
                     </a>
                   )}
@@ -113,17 +114,11 @@ function ReviewsFull() {
             <ReviewsArrows className="hidden shrink-0 md:flex" />
           </div>
 
-          {isDemoReviews() && (
-            <p role="note" className="mt-8 rounded-2xl bg-rust px-4 py-3 text-center text-[13px] font-medium text-white">
-              Demo reviews — development preview only, not real patient reviews
-            </p>
-          )}
-
           <section aria-roledescription="carousel" aria-label="Patient reviews" className="mt-12">
             {/* bleeds past the container to the right edge of the viewport */}
             <div className="mr-[calc(50%-50vw)]">
-              <ReviewsTrack className="flex snap-x snap-mandatory gap-6 overflow-x-auto pr-6 pb-2 [scrollbar-width:none] focus-visible:outline-offset-4 lg:pr-16 [&::-webkit-scrollbar]:hidden">
-                {displayReviews().map((r, i) => (
+              <ReviewsTrack className="flex snap-x snap-mandatory gap-6 overflow-x-auto pr-6 pb-2 [scrollbar-width:none] focus-visible:outline-accent focus-visible:outline-offset-4 lg:pr-16 [&::-webkit-scrollbar]:hidden">
+                {reviews.map((r, i) => (
                   <ReviewCard key={`${r.name}-${i}`} r={r} className="w-[85%] shrink-0 snap-start sm:w-[320px] md:w-[360px]" />
                 ))}
               </ReviewsTrack>
@@ -132,9 +127,9 @@ function ReviewsFull() {
           </section>
 
           <div className="mt-12 text-center">
-            <p className="text-sm text-ink/70">Visited Dr. Das? Your review helps other patients.</p>
+            <p className="text-sm text-white/80">Visited Dr. Das? Your review helps other patients.</p>
             {writeReviewUrl && (
-              <Pill href={writeReviewUrl} variant="rust" className="mt-4">
+              <Pill href={writeReviewUrl} variant="accent" className="mt-4">
                 Write a review
               </Pill>
             )}
@@ -145,21 +140,18 @@ function ReviewsFull() {
   );
 }
 
-/** Fallback: fewer than 2 real reviews, but a review/listing link exists */
-function ReviewsFallback() {
+/** Fallback: fewer than 2 real reviews, but a review/listing link exists. Same navy styling. */
+function ReviewsFallback({ headingAs: Heading }: HeadingProps) {
   const { listingUrl, writeReviewUrl } = reviewSummary;
-  const single = displayReviews()[0];
+  const single = reviews[0];
   return (
-    <section id="reviews" aria-labelledby="reviews-title" className="relative bg-cream py-24">
+    <section id="reviews" aria-labelledby="reviews-title" className={cn("relative bg-primary", Heading === "h1" ? "pt-36 pb-24" : "py-24")}>
       <div className="mx-auto max-w-[640px] px-6 text-center">
         <RevealHeader>
-          <h2
-            id="reviews-title"
-            className="font-heading text-[clamp(2.5rem,5.5vw,4.5rem)] leading-none font-medium tracking-[-0.03em] text-ink"
-          >
-            Your <AccentWord>feedback</AccentWord> matters
-          </h2>
-          <p className="mt-4 text-[15px] leading-[1.65] text-ink/75">
+          <Heading id="reviews-title" className={titleClass}>
+            Your <AccentWord onDark>feedback</AccentWord> matters
+          </Heading>
+          <p className="mt-4 text-[15px] leading-[1.65] text-white/80">
             Visited Dr. Biswajyoti Das? Share your experience to help other patients find the right care.
           </p>
         </RevealHeader>
@@ -170,12 +162,12 @@ function ReviewsFallback() {
         )}
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           {writeReviewUrl && (
-            <Pill href={writeReviewUrl} variant="rust">
+            <Pill href={writeReviewUrl} variant="accent">
               Write a Google review
             </Pill>
           )}
           {listingUrl && (
-            <Pill href={listingUrl} variant="outline-dark">
+            <Pill href={listingUrl} variant="outline-light">
               See listing
             </Pill>
           )}
@@ -185,9 +177,10 @@ function ReviewsFallback() {
   );
 }
 
-export function Reviews() {
+/** `headingAs="h1"` on /reviews, where it is the whole page */
+export function Reviews({ headingAs = "h2" }: { headingAs?: "h1" | "h2" }) {
   const state = reviewsState();
-  if (state === "full") return <ReviewsFull />;
-  if (state === "fallback") return <ReviewsFallback />;
+  if (state === "full") return <ReviewsFull headingAs={headingAs} />;
+  if (state === "fallback") return <ReviewsFallback headingAs={headingAs} />;
   return null;
 }

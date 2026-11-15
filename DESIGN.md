@@ -182,7 +182,7 @@ Every button needs a visible focus ring: `focus-visible:ring-2 ring-offset-2 rin
 - **Tone:** warm, bright, natural light, real people smiling. Avoid cold blue hospital shots.
 - **Subjects:** ENT exams (otoscope, endoscope), the doctor talking to patients, children with parents, older adults.
 - Don't use photos with visible blood, needles or surgery.
-- Hero: light pastel anatomical ear illustration (`public/images/hero-ear.webp`, 2400×1350 recommended), `object-position: 55% 50%`, with a 4% grain overlay.
+- Hero: light pastel anatomical ear illustration (`public/images/hero-ear-cool.webp`, 2400×1350 recommended), `object-position: 55% 50%`, with a 4% grain overlay.
 - Every image goes through `next/image` with `sizes` set; the hero uses `priority`.
 - Swap in the doctor's real photos before launch (all image paths live in `data/site.ts`).
 
