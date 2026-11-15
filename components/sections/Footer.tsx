@@ -42,6 +42,7 @@ export function Footer() {
     { label: "Chamber", href: "/chamber" },
     ...(reviewsState() === "hidden" ? [] : [{ label: "Reviews", href: "/reviews" }]),
     { label: "FAQ", href: "/faq" },
+    { label: "Gallery", href: "/gallery" },
     { label: "Blog", href: "/blog" },
   ];
   const treatments = services.slice(0, 5);

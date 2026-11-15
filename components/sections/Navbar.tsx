@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 type Props = {
   name: string;
   /** every link is its own page ("/", "/services", "/chamber"…) */
-  links: { label: string; href: string }[];
+  links: { label: string; href: string; hideOnTablet?: boolean }[];
 };
 
 /** background appears as soon as the page moves; height shrinks after 80px */
@@ -85,7 +85,7 @@ export function Navbar({ name, links }: Props) {
         {/* tighter link spacing on tablets (768–1023) so the name, 5 links and Book Now fit on one row */}
         <ul className="hidden shrink-0 items-center gap-5 md:flex lg:gap-8">
           {links.map((l) => (
-            <li key={l.href}>
+            <li key={l.href} className={cn(l.hideOnTablet && "md:max-lg:hidden")}>
               <SectionLink
                 href={l.href}
                 aria-current={isCurrent(l.href) ? "page" : undefined}

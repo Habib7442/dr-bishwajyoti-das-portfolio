@@ -240,6 +240,8 @@ export const nav = [
   { label: "Services", href: "/services" },
   { label: "About", href: "/about" },
   { label: "Reviews", href: "/reviews" },
+  // hidden from the 768–1023 desktop row (no room beside the name); still in the mobile menu, 1024+ and the footer
+  { label: "Gallery", href: "/gallery", hideOnTablet: true },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/chamber" },
 ];
@@ -313,6 +315,17 @@ export const pages = {
     askText: "Send it on WhatsApp. Common questions help decide what we write about next.",
     askLabel: "Ask on WhatsApp",
     askMessage: "Hello, I have a question I'd like to see answered on the blog.",
+  },
+  gallery: {
+    title: "Gallery: What the Doctor Sees",
+    eyebrow: "Gallery",
+    heading: "What the doctor sees",
+    intro: "Real camera views, scans and photos from ENT care, with a short note on what each one shows.",
+    description:
+      "Real endoscopy views and scans from Dr. Biswajyoti Das's ENT practice in Silchar: the voice box, eardrum, nose and adenoids, explained in plain language.",
+    viewLabel: "View photo",
+    backLabel: "All photos",
+    relatedLabel: "Related service",
   },
   notFound: {
     title: "Page not found",
