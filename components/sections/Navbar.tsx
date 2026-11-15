@@ -38,7 +38,8 @@ export function Navbar({ name, links }: Props) {
   const [compact, setCompact] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-  const isCurrent = (href: string) => href === pathname;
+  // exact page, or a child page of it (/services/ear keeps "Services" active)
+  const isCurrent = (href: string) => href === pathname || (href !== "/" && pathname.startsWith(`${href}/`));
   // home starts on the light hero; every other page gets the solid bar from the top
   // (/chamber and /reviews open on a navy band, where a transparent bar's navy text would vanish)
   const solid = scrolled || pathname !== "/";

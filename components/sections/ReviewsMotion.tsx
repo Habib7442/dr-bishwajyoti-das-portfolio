@@ -33,7 +33,7 @@ export function RevealHeader({ className, children }: { className?: string; chil
  */
 export function AccentWord({ children, onDark = false }: { children: React.ReactNode; onDark?: boolean }) {
   return (
-    <span className={cn("relative z-0 inline-block", onDark && "px-[0.08em] text-primary")}>
+    <span className={cn("relative isolate z-0 inline-block", onDark && "px-[0.08em] text-primary")}>
       {children}
       <Highlighter
         trigger="parent"

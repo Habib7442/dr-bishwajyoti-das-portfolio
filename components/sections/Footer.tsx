@@ -42,6 +42,7 @@ export function Footer() {
     { label: "Chamber", href: "/chamber" },
     ...(reviewsState() === "hidden" ? [] : [{ label: "Reviews", href: "/reviews" }]),
     { label: "FAQ", href: "/faq" },
+    { label: "Blog", href: "/blog" },
   ];
   const treatments = services.slice(0, 5);
   const social = (Object.entries(footer.social) as [SocialKey, string][]).filter(([, v]) => !isTodo(v));
@@ -101,7 +102,7 @@ export function Footer() {
             <ul className="mt-4 grid gap-3">
               {treatments.map((s) => (
                 <li key={s.slug}>
-                  <SectionLink href={`/services#${s.slug}`} className={link}>
+                  <SectionLink href={`/services/${s.slug}`} className={link}>
                     {s.shortTitle ?? s.title}
                   </SectionLink>
                 </li>

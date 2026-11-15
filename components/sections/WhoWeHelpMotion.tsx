@@ -20,7 +20,7 @@ export function WhoTitle({ id, lead, accent, className }: { id: string; lead: st
       variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.7, ease } } }}
     >
       {lead}{" "}
-      <span className="relative z-0 inline-block">
+      <span className="relative isolate z-0 inline-block">
         {accent}
         <Highlighter trigger="parent" delay={0.5} />
       </span>

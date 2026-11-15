@@ -232,6 +232,7 @@ export const nav = [
   { label: "Services", href: "/services" },
   { label: "About", href: "/about" },
   { label: "Reviews", href: "/reviews" },
+  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/chamber" },
 ];
 
@@ -247,11 +248,40 @@ export const pages = {
       "Book an appointment with Dr. Biswajyoti Das, ENT & Allergy Specialist in Silchar, at Nightingale Hospital, Meherpur. Mon–Sat, 2:30–9 PM.",
   },
   services: {
-    title: "ENT & Allergy Services",
+    title: "ENT Services in Silchar", // → "ENT Services in Silchar | Dr. Biswajyoti Das"
     eyebrow: "What we treat",
     heading: "Our Services",
     description:
-      "Ear, hearing, sinus, nose, throat, voice and allergy care in Silchar by Dr. Biswajyoti Das, ENT & Allergy Specialist at Nightingale Hospital, Meherpur.",
+      "Treatment for ear problems, hearing loss, sinus, allergy, tonsils, throat and voice, vertigo and snoring by Dr. Biswajyoti Das, ENT & Allergy Specialist at Nightingale Hospital, Meherpur, Silchar.",
+    filterLabel: "Filter services",
+    // "Not sure?" card that fills the last row of the grid
+    help: {
+      eyebrow: "Need help choosing?",
+      title: "Not sure what you need?",
+      text: "Tell us your problem on WhatsApp and we'll guide you to the right appointment.",
+      whatsappLabel: "Ask on WhatsApp",
+      whatsappMessage: "Hello, I'm not sure which appointment I need. Can you help?",
+      // pills that open WhatsApp with the text prefilled (hidden while the WhatsApp number is TODO)
+      quickLabel: "Tap to ask",
+      quickQuestions: ["I have ear pain or blocked ears", "My nose is always blocked", "My child snores at night", "I keep sneezing / allergy"],
+      // illustrative WhatsApp-style chat (labelled "Example conversation" on the page; not a real chat)
+      chat: {
+        name: "Dr. Biswajyoti Das' Chamber",
+        // TODO (not shown as TODO): confirm with the clinic that this is true before launch
+        status: "Usually replies during chamber hours",
+        messages: [
+          { from: "patient", text: "Hi, my son snores a lot at night. Can I book a check-up?", time: "6:42 PM" },
+          {
+            from: "clinic",
+            text: `Yes, of course. Please share a convenient day. Chamber is ${quickFactsShort.hours.replace(" · ", ", ")} at ${site.address.hospital}.`,
+            time: "6:44 PM",
+          },
+          { from: "patient", text: "Tomorrow evening works", time: "6:45 PM", thumbsUp: true },
+        ] as { from: "patient" | "clinic"; text: string; time: string; thumbsUp?: boolean }[],
+        inputPlaceholder: "Type your problem…",
+        caption: "Example conversation",
+      },
+    },
   },
   chamber: {
     title: "Chamber, Timings & Fee",
@@ -262,6 +292,28 @@ export const pages = {
     title: "Frequently Asked Questions",
     description:
       "Answers about booking, timings, fees and visiting Dr. Biswajyoti Das, ENT & Allergy Specialist at Nightingale Hospital, Meherpur, Silchar.",
+  },
+  blog: {
+    title: "ENT & Allergy Health Blog",
+    eyebrow: "Health tips",
+    heading: "Blog",
+    intro: "Simple, plain-language guides on ear, nose, throat and allergy care are on the way.",
+    description:
+      "Plain-language guides on ear, nose, throat and allergy care from Dr. Biswajyoti Das, ENT & Allergy Specialist in Silchar. New articles coming soon.",
+    comingSoon: "Coming soon",
+    askTitle: "Have a question you'd like answered?",
+    askText: "Send it on WhatsApp. Common questions help decide what we write about next.",
+    askLabel: "Ask on WhatsApp",
+    askMessage: "Hello, I have a question I'd like to see answered on the blog.",
+  },
+  notFound: {
+    title: "Page not found",
+    eyebrow: "Error 404",
+    heading: "We couldn't find that page",
+    text: "The page you're looking for doesn't exist or may have moved. Try one of these instead.",
+    homeLabel: "Back to home",
+    bookLabel: "Book an appointment",
+    linksLabel: "Popular pages",
   },
   reviews: {
     title: "Patient Reviews",
@@ -360,10 +412,68 @@ export const services: Service[] = [
   },
 ];
 
+/**
+ * Upcoming blog articles, listed on /blog as "Coming soon" (not clickable yet).
+ * TODO (not shown on the page): the doctor should review these topics; titles promise no results or cures.
+ */
+export type BlogTopic = "Ear" | "Nose" | "Throat" | "Allergy" | "Children";
+export const upcomingPosts: { slug: string; topic: BlogTopic; title: string; excerpt: string }[] = [
+  {
+    slug: "blocked-ears",
+    topic: "Ear",
+    title: "Blocked ears: common causes and when to see an ENT doctor",
+    excerpt: "Wax, colds, water and pressure changes can all make an ear feel blocked. What each one feels like, and when a check-up helps.",
+  },
+  {
+    slug: "sinusitis-or-cold",
+    topic: "Nose",
+    title: "Sinusitis or a common cold? How to tell the difference",
+    excerpt: "Both cause a blocked, runny nose. How long it lasts and where you feel the pressure are often the clues.",
+  },
+  {
+    slug: "snoring-in-children",
+    topic: "Children",
+    title: "Snoring in children: why it's worth a check-up",
+    excerpt: "Regular snoring or mouth breathing in children can be linked to tonsils or adenoids. What parents can look out for at night.",
+  },
+  {
+    slug: "dust-allergy",
+    topic: "Allergy",
+    title: "Dust and seasonal allergies: understanding your triggers",
+    excerpt: "Sneezing every morning or every season? How allergy triggers are found, and why knowing them makes treatment easier.",
+  },
+  {
+    slug: "tonsillitis",
+    topic: "Throat",
+    title: "Tonsillitis in children and adults: what to expect at your visit",
+    excerpt: "What the doctor checks during a sore-throat visit, and the questions it helps to have answers ready for.",
+  },
+  {
+    slug: "hearing-loss-older-adults",
+    topic: "Ear",
+    title: "Hearing changes in older adults: signs families often miss",
+    excerpt: "Turning the TV up or asking people to repeat themselves can be early signs. How a hearing check works.",
+  },
+];
+
 /** Rows shown before "See All" */
 export const servicesVisible = 4;
 
 export const servicesIntro = "Treatment for common and long-standing ear, nose, throat and allergy problems, for all ages.";
+
+/**
+ * Filter chips on /services (?type=ear …). Each matches services by their booking `problem`;
+ * "Procedures" covers problem "Other" (the in-chamber endoscopy check-up).
+ */
+export const serviceFilters = [
+  { key: "all", label: "All", problem: null },
+  { key: "ear", label: "Ear", problem: "Ear" },
+  { key: "nose", label: "Nose", problem: "Nose" },
+  { key: "throat", label: "Throat", problem: "Throat" },
+  { key: "allergy", label: "Allergy", problem: "Allergy" },
+  { key: "procedures", label: "Procedures", problem: "Other" },
+] as const satisfies readonly { key: string; label: string; problem: (typeof booking.problems)[number] | null }[];
+export type ServiceFilterKey = (typeof serviceFilters)[number]["key"];
 
 
 /** White FAQ band. Answers are built from the data above so facts stay in sync; also the source of the FAQPage JSON-LD. */

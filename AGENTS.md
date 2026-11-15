@@ -47,9 +47,11 @@ Main user flow: land on the hero → scan the services → read about the doctor
     - `/chamber`: the Chamber section (`h1`) + CTA
     - `/faq`: the FAQ section (`h1`) + CTA; FAQPage JSON-LD stays on `/` only
     - `/reviews`: real reviews only; a 404 (and no nav/footer/sitemap entry) while `reviewsState()` is "hidden"
+    - `/blog`: upcoming articles from `upcomingPosts` in `data/site.ts`, each marked "Coming soon" (no article pages yet)
+    - `app/not-found.tsx`: custom 404 inside the layout (navbar + footer)
 16. Route loading states: `RouteProgress` top bar, `loading.tsx` per route (`PageLoader`, skeletons for `/services` and `/reviews`), `app/template.tsx` fade-up
 
-Do not overbuild. No blog, no CMS, no admin panel, no login, no database, no contact-form backend, no extra pages (beyond `/privacy`, `/book`, `/services`, `/about`, `/chamber`, `/faq`, `/reviews`), no dark mode, no i18n, no analytics unless asked.
+Do not overbuild. No blog engine or article pages yet (only the `/blog` "Coming soon" list), no CMS, no admin panel, no login, no database, no contact-form backend, no extra pages (beyond `/privacy`, `/book`, `/services`, `/services/[slug]`, `/about`, `/chamber`, `/faq`, `/reviews`, `/blog`), no dark mode, no i18n, no analytics unless asked.
 
 ---
 

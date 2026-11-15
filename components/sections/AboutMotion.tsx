@@ -181,7 +181,7 @@ export function StatementHeading({
           <Highlighter trigger="parent" delay={highlightDelay} />
         </>,
         words.length,
-        "relative z-0 text-primary",
+        "relative isolate z-0 text-primary",
       )}
     </Heading>
   );

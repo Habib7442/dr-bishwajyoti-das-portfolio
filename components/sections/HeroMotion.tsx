@@ -62,7 +62,7 @@ export function HeroHeadline({ lines, highlight }: { lines: string[]; highlight:
               <span key={wi}>
                 <span className="inline-block overflow-hidden pb-[0.06em] align-bottom">
                   <motion.span
-                    className={isHighlight ? "relative z-0 inline-block" : "inline-block"}
+                    className={isHighlight ? "relative isolate z-0 inline-block" : "inline-block"}
                     initial={{ y: "100%", opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: WORD_DURATION, ease, delay }}
