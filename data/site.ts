@@ -9,8 +9,16 @@ import { formatTime } from "@/lib/chamber-hours";
 const unsplash = (id: string) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1600&q=80`;
 
 export const site = {
-  // TODO: replace with the final domain once it's bought / connected on Vercel
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://dr-biswajyoti-das.vercel.app",
+  // Canonical origin for metadata, og:image, JSON-LD, sitemap and robots (server-side only).
+  // 1. NEXT_PUBLIC_SITE_URL: set it in Vercel once the custom domain is connected (e.g. https://example.com)
+  // 2. VERCEL_PROJECT_PRODUCTION_URL: Vercel's own production domain, set automatically on every Vercel build
+  // 3. fallback for local builds: the current production address
+  // (A wrong origin here breaks link previews: og:image pointed at a domain that doesn't exist.)
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : "https://dr-bishwajyoti-das-portfolio.vercel.app"),
 
   name: "Dr. Biswajyoti Das",
   title: "ENT & Allergy Specialist",

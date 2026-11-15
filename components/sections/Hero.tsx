@@ -30,7 +30,8 @@ export function Hero() {
             fetchPriority="high"
             sizes="100vw"
             quality={80}
-            className="object-cover object-[60%_20%] opacity-90 saturate-[0.85] md:object-[60%_50%] md:opacity-100 md:saturate-[0.9]"
+            // no CSS filter: a filtered full-screen image is repainted on every frame of the load zoom
+            className="object-cover object-[60%_20%] opacity-90 md:object-[60%_50%] md:opacity-100"
           />
         </div>
       </HeroBackdrop>

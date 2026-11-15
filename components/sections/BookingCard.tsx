@@ -153,7 +153,8 @@ export function BookingCard() {
   const selectedIdx = booking.problems.indexOf(form.problem as Problem);
 
   return (
-    <div id={BOOKING_CARD_ID} className="w-full max-w-[440px] rounded-[28px] border border-white/80 bg-white/60 p-5 backdrop-blur-xl md:p-6 lg:p-7">
+    // backdrop-blur-md + a slightly more solid white: same frosted look, far cheaper to re-blur while the hero animates
+    <div id={BOOKING_CARD_ID} className="w-full max-w-[440px] rounded-[28px] border border-white/80 bg-white/70 p-5 backdrop-blur-md md:p-6 lg:p-7">
       {done ? (
         <div className="flex min-h-[380px] flex-col items-center justify-center text-center">
           <span className="grid size-16 place-items-center rounded-full bg-accent text-primary">

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
 import { Menu, X } from "lucide-react";
+import { Monogram } from "@/components/ui/monogram";
 import { SectionLink } from "@/components/ui/section-link";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { ease } from "@/lib/motion";
@@ -22,7 +23,7 @@ const BG_THRESHOLD = 8;
 const SHRINK_THRESHOLD = 80;
 
 const bookNowClass =
-  "inline-flex h-10 items-center rounded-full bg-primary px-5 text-[13px] font-medium text-white transition duration-200 ease-out hover:-translate-y-px hover:bg-primary-dark motion-reduce:hover:translate-y-0";
+  "inline-flex h-10 items-center rounded-full bg-primary px-5 text-[13px] font-medium whitespace-nowrap text-white transition duration-200 ease-out hover:-translate-y-px hover:bg-primary-dark motion-reduce:hover:translate-y-0";
 
 const deskLink = "text-[11px] tracking-[0.08em] uppercase underline-offset-8 transition-colors";
 const deskActive = "font-semibold text-primary underline decoration-accent decoration-2";
@@ -71,15 +72,18 @@ export function Navbar({ name, links }: Props) {
       <nav
         aria-label="Main"
         className={cn(
-          "mx-auto flex max-w-[1200px] items-center justify-between px-6 transition-[height] duration-300 ease-out lg:px-16",
+          "mx-auto flex max-w-[1200px] items-center justify-between gap-3 px-6 transition-[height] duration-300 ease-out md:gap-6 lg:px-16",
           compact ? "h-16" : "h-20",
         )}
       >
-        <Link href="/" className="font-heading text-xl font-semibold tracking-[-0.03em] text-primary md:text-2xl">
-          {name}
+        {/* "BD" initials + name; the name shrinks a little on phones so the header Book button fits at 360px */}
+        <Link href="/" className="flex min-w-0 items-center gap-2.5 rounded-[12px] text-primary md:gap-3">
+          <Monogram className="size-9 rounded-[10px] text-[14px] lg:size-10 lg:text-[15px]" />
+          <span className="truncate font-heading text-lg font-semibold tracking-[-0.03em] sm:text-xl lg:text-2xl">{name}</span>
         </Link>
 
-        <ul className="hidden items-center gap-8 md:flex">
+        {/* tighter link spacing on tablets (768–1023) so the name, 5 links and Book Now fit on one row */}
+        <ul className="hidden shrink-0 items-center gap-5 md:flex lg:gap-8">
           {links.map((l) => (
             <li key={l.href}>
               <SectionLink
@@ -98,17 +102,22 @@ export function Navbar({ name, links }: Props) {
           </li>
         </ul>
 
+        {/* phones: menu button only; booking lives in the menu (full-width Book Now) and the hero form */}
+        <div className="flex shrink-0 items-center md:hidden">
         <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-          <SheetTrigger className="-mr-2 grid size-11 place-items-center rounded-full text-primary md:hidden" aria-label="Open menu">
+          <SheetTrigger className="-mr-2 grid size-11 place-items-center rounded-full text-primary" aria-label="Open menu">
             <Menu className="size-6" strokeWidth={1.5} />
           </SheetTrigger>
           <SheetContent
             side="top"
             showCloseButton={false}
-            className="border-none bg-primary px-6 pt-5 pb-10 text-white shadow-none data-[side=top]:h-dvh"
+            className="flex flex-col border-none bg-primary px-6 pt-5 pb-10 text-white shadow-none data-[side=top]:h-dvh"
           >
             <div className="flex h-11 items-center justify-between">
-              <SheetTitle className="font-heading text-xl font-semibold tracking-[-0.03em] text-white">{name}</SheetTitle>
+              <SheetTitle className="flex items-center gap-2.5 font-heading text-xl font-semibold tracking-[-0.03em] text-white">
+                <Monogram className="size-9 rounded-[10px] bg-white/10 text-[14px]" />
+                {name}
+              </SheetTitle>
               <SheetClose
                 className="-mr-2 grid size-11 place-items-center rounded-full text-white focus-visible:outline-accent"
                 aria-label="Close menu"
@@ -135,8 +144,25 @@ export function Navbar({ name, links }: Props) {
                 </motion.li>
               ))}
             </ul>
+
+            {/* booking at the bottom of the menu, full width, easy to reach with a thumb */}
+            <motion.div
+              className="mt-auto pt-10"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease, delay: 0.1 + links.length * 0.06 }}
+            >
+              <SheetClose
+                nativeButton={false}
+                render={<Link href={bookingPageHref()} />}
+                className="flex h-12 w-full items-center justify-center rounded-full bg-accent text-sm font-medium text-primary transition-colors hover:bg-accent-dark focus-visible:outline-accent"
+              >
+                Book Now
+              </SheetClose>
+            </motion.div>
           </SheetContent>
         </Sheet>
+        </div>
       </nav>
     </header>
   );
