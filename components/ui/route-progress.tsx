@@ -87,8 +87,11 @@ export function RouteProgress() {
 
   const start = useCallback(() => {
     if (active.current) return;
-    clearAll();
+    clearAll(); // also drops a previous finish's pending hide, so reset the bar here
     active.current = true;
+    shown.current = false;
+    setVisible(false);
+    setProgress(0);
     setFading(false);
     later(() => {
       shown.current = true;

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { animate, motion, useReducedMotion } from "motion/react";
 import { ease } from "@/lib/motion";
-import { bookNow, bookingPageHref } from "@/lib/scroll-to-booking";
+import { bookNow, bookingPageHref, isPlainClick } from "@/lib/scroll-to-booking";
 import { cancelRouteProgress } from "@/components/ui/route-progress";
 import { cn } from "@/lib/utils";
 import { useReveal } from "@/lib/use-reveal";
@@ -89,7 +89,7 @@ export function BookScrollPill({ className, children }: { className?: string; ch
     <Link
       href={bookingPageHref()}
       onClick={(e) => {
-        if (bookNow()) {
+        if (isPlainClick(e) && bookNow()) {
           e.preventDefault();
           cancelRouteProgress(); // scrolled to the form on this page: no page change
         }

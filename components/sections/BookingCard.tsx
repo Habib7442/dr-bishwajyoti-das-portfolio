@@ -16,7 +16,7 @@ import {
 } from "@/lib/booking";
 import { isTodo, telHref, whatsappUrl } from "@/lib/site-helpers";
 import { cn } from "@/lib/utils";
-import { PREFILL_EVENT, PROBLEM_PARAM, type PrefillDetail } from "@/lib/scroll-to-booking";
+import { BOOKING_CARD_ID, PREFILL_EVENT, PROBLEM_PARAM, type PrefillDetail } from "@/lib/scroll-to-booking";
 
 const inputBase =
   "h-11 w-full rounded-2xl border border-primary/15 bg-white/85 px-4 text-base text-ink placeholder:text-ink/45 transition-colors focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none aria-invalid:border-primary";
@@ -153,7 +153,7 @@ export function BookingCard() {
   const selectedIdx = booking.problems.indexOf(form.problem as Problem);
 
   return (
-    <div className="w-full max-w-[440px] rounded-[28px] border border-white/80 bg-white/60 p-5 backdrop-blur-xl md:p-6 lg:p-7">
+    <div id={BOOKING_CARD_ID} className="w-full max-w-[440px] rounded-[28px] border border-white/80 bg-white/60 p-5 backdrop-blur-xl md:p-6 lg:p-7">
       {done ? (
         <div className="flex min-h-[380px] flex-col items-center justify-center text-center">
           <span className="grid size-16 place-items-center rounded-full bg-accent text-primary">

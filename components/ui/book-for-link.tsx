@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { bookNow, bookingPageHref, type PrefillProblem } from "@/lib/scroll-to-booking";
+import { bookNow, bookingPageHref, isPlainClick, type PrefillProblem } from "@/lib/scroll-to-booking";
 import { cancelRouteProgress } from "@/components/ui/route-progress";
 
 /**
@@ -26,7 +26,7 @@ export function BookForLink({
       aria-label={label}
       className={className}
       onClick={(e) => {
-        if (bookNow(problem)) {
+        if (isPlainClick(e) && bookNow(problem)) {
           e.preventDefault();
           cancelRouteProgress(); // scrolled to the form on this page: no page change
         }

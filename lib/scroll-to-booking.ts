@@ -1,3 +1,4 @@
+import type { MouseEvent } from "react";
 import type { booking } from "@/data/site";
 
 export type PrefillProblem = (typeof booking.problems)[number];
@@ -8,6 +9,9 @@ export type PrefillDetail = { problem: PrefillProblem };
 
 /** Query param /book reads to pre-select a problem chip (e.g. /book?problem=Nose) */
 export const PROBLEM_PARAM = "problem";
+
+/** id of the BookingCard's always-rendered wrapper */
+export const BOOKING_CARD_ID = "booking-card";
 
 /** The /book page, optionally with a problem pre-selected */
 export const bookingPageHref = (problem?: PrefillProblem) =>
@@ -20,11 +24,16 @@ export const bookingPageHref = (problem?: PrefillProblem) =>
  * next/link then navigates to /book?problem=… instead.
  */
 export function bookNow(problem?: PrefillProblem): boolean {
-  if (!document.getElementById("bk-name")) return false;
+  // the card is always rendered; #bk-name is not while the success screen shows
+  if (!document.getElementById(BOOKING_CARD_ID)) return false;
   if (problem) window.dispatchEvent(new CustomEvent<PrefillDetail>(PREFILL_EVENT, { detail: { problem } }));
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const target = document.getElementById("home") ?? document.getElementById("book-form");
   target?.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
-  document.getElementById("bk-name")?.focus({ preventScroll: true });
+  // two frames: let the prefill re-render the form (success screen → form) before focusing
+  requestAnimationFrame(() => requestAnimationFrame(() => document.getElementById("bk-name")?.focus({ preventScroll: true })));
   return true;
 }
+
+/** Plain primary click without modifier keys (modified clicks keep native new-tab/window behaviour) */
+export const isPlainClick = (e: MouseEvent<HTMLElement>) => e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey;

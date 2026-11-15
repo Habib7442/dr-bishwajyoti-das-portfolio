@@ -27,7 +27,8 @@ export function SectionLink({ href, onClick, ...rest }: Props) {
       href={id ? `${path}#${id}` : path}
       onClick={(e) => {
         onClick?.(e); // e.g. the mobile menu's close handler
-        if (!id || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        const target = e.currentTarget.target;
+        if (!id || (target && target !== "_self") || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
         e.preventDefault();
         if (path === pathname) {
           afterDialogsClose(() => scrollToSection(id));

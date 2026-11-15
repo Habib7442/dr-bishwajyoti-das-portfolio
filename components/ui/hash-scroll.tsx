@@ -14,7 +14,12 @@ export function HashScroll() {
 
   useEffect(() => {
     const pending = takePendingSection();
-    const fromHash = window.location.hash ? decodeURIComponent(window.location.hash.slice(1)) : null;
+    let fromHash: string | null = null;
+    try {
+      fromHash = window.location.hash ? decodeURIComponent(window.location.hash.slice(1)) : null;
+    } catch {
+      // malformed fragment (e.g. "#%E0"): treat as no hash
+    }
     const id = pending ?? fromHash;
     stripHash();
     if (!id) return;
